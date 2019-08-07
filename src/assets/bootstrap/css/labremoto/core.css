@@ -1,0 +1,23 @@
+html,
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: "Roboto", Helvetica, sans-serif;
+}
+
+header {
+    padding: 10px;
+    background: #fc9b62;
+}
+
+.body-wrap {
+    min-height: 100%;
+    min-width: 100%;
+    background: #fefefe;
+}
+
+header .title {
+    color: #fff;
+    font-size: 1.3em;
+    font-weight: 500;
+}
