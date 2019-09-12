@@ -1,9 +1,12 @@
 <div class="main-wrapper">
     <header>
-        <div class='title'><strong>L</strong>aboratório <strong>R</strong>emoto de <strong>R</strong>obótica <strong>M</strong>óvel</div>
+        <div class='title'><strong>L</strong>aboratório <strong>R</strong>emoto de <strong>R</strong>obótica
+            <strong>M</strong>óvel</div>
     </header>
     <div class='body-wrap'>
-
+        <ng-container *ngIf="!usuario">
+            <app-login></app-login>
+        </ng-container>
 
     </div>
     <footer>
