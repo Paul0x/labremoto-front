@@ -22,6 +22,6 @@ export class LoginComponent implements OnInit {
   }
 
   authUser() {
-      this.loginService.authUser(this.loginDTO);
+      // this.loginService.authUser(this.loginDTO);
   }
 }

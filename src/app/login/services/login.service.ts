@@ -1,17 +1,12 @@
+import { environment } from 'environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { SharedDataService } from 'src/app/services/SharedDataService';
-import { environment } from 'src/environments/environment';
-import { LoginDTO } from '../dto/login-dto';
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class LoginService {
 
   constructor(private _http: HttpClient) { }
 
-  authUser(dto: LoginDTO) {
+  authUser(dto: any) {
     return this._http.post(environment.URLS.login, dto);
   }
 }
