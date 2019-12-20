@@ -5,7 +5,7 @@ import URLS from './urls';
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const serverUrl = 'http://localhost/labremoto';
+const serverUrl = 'http://localhost/labremoto-back';
 const baseUrl = 'http://localhost:4200';
 export const environment = {
   production: false,

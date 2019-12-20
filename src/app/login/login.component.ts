@@ -22,6 +22,9 @@ export class LoginComponent implements OnInit {
   }
 
   authUser() {
-      // this.loginService.authUser(this.loginDTO);
+      this.loginDTO = this.loginForm.value;
+      this.loginService.authUser(this.loginDTO).subscribe((resp: any) => {
+
+      });
   }
 }
