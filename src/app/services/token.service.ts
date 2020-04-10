@@ -18,14 +18,6 @@ export class TokenService {
       this.token :
       localStorage.getItem('token');
   }
-  getPerfil() {
-    const token = this.parseToken();
-    if (token === null) {
-      return null;
-    }
-    const obj = JSON.parse(token);
-    return obj.profile;
-  }
 
   parseToken() {
     const _token = this.getToken();
@@ -43,13 +35,23 @@ export class TokenService {
     }
   }
 
-  getId() {
+  getMatricula() {
     const token = this.parseToken();
     if (token === null) {
       return null;
     }
     const obj = JSON.parse(token);
-    return obj.cpf;
+    return obj.data.matricula;
+  }
+
+  getNome() {
+    const token = this.parseToken();
+    if (token === null) {
+      return null;
+    }
+    const obj = JSON.parse(token);
+    console.log(obj);
+    return obj.data.nome;
   }
 
 }

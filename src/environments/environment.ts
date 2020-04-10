@@ -9,6 +9,7 @@ const serverUrl = 'http://localhost/labremoto-back';
 const baseUrl = 'http://localhost:4200';
 export const environment = {
   production: false,
+  BASE_REF: baseUrl,
   URLS: URLS.env(serverUrl, baseUrl, serverUrl)
 };
 

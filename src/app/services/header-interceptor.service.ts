@@ -1,28 +1,30 @@
 import { Observable } from 'rxjs';
 import { TokenService } from './token.service';
 import { Injectable, Injector } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse, HttpResponse, HttpClient } from '@angular/common/http';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from 'environments/environment';
 
 
 @Injectable()
 export class HeaderInterceptorService implements HttpInterceptor {
 
-  constructor(private token: TokenService, private router: Router, private toastr: ToastrService) { }
+  constructor(private token: TokenService, private router: Router, private toastr: ToastrService, private httpClient: HttpClient) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
     if (typeof (this.token.getToken()) === 'undefined' || this.token.getToken() === null) {
-      const reg = new RegExp('/v1/auth/login-interno');
-      const reg2 = new RegExp('/api/v1/planejamento/gecon/public');
-      if (!reg.test(req.url) && !reg2.test(req.url)) {
+
+      if (this.checkUrl(req.url)) {
+        localStorage.clear();
+        window.location.href = environment.BASE_REF;
         this.router.navigateByUrl(`/login`);
         return Observable.throw('Sem token de autenticação.');
       }
     }
+    
     const newReq = req.clone({
       setHeaders: {
         Authorization: `Bearer ${this.token.getToken()}`
@@ -58,7 +60,7 @@ export class HeaderInterceptorService implements HttpInterceptor {
               console.log('erro');
             });
         }, 300);
-      } else if(err.status === 409) {
+      } else if (err.status === 409) {
         setTimeout(() => {
           this.toastr
             .error(
@@ -97,5 +99,10 @@ export class HeaderInterceptorService implements HttpInterceptor {
     }
     // handle your auth error or rethrow
     return Observable.throw(err);
+  }
+
+  checkUrl(url) {
+    const reg = new RegExp('/login');
+    return !reg.test(url);
   }
 }

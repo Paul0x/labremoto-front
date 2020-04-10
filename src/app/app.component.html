@@ -4,10 +4,20 @@
             <strong>M</strong>óvel</div>
     </header>
     <div class='body-wrap'>
-        <ng-container *ngIf="!usuario">
-            <app-login></app-login>
-        </ng-container>
-
+        <div class='container-fluid' *ngIf='usuario != null'>
+            <div class='row'>
+                <div class='menu'>
+                    <app-menu (toggleMenu)='toggleMenu()'></app-menu>
+                </div>
+                <div class='content-{{ menuCollapsed }} container-fluid'>
+                    <router-outlet></router-outlet>
+                </div>
+                <div class='clearfix'></div>
+            </div>
+        </div>
+        <div class='container-fluid' *ngIf='usuario == null'>
+            <router-outlet></router-outlet>
+        </div>
     </div>
     <footer>
 

@@ -6,8 +6,9 @@ body {
 }
 
 header {
-    padding: 10px;
-    background: #fc9b62;
+    padding: 25px;
+    background: #183f86;
+    border-bottom: 5px solid #122b58;
 }
 
 .body-wrap {
@@ -18,6 +19,11 @@ header {
 
 header .title {
     color: #fff;
-    font-size: 1.3em;
+    font-size: 1.9em;
     font-weight: 500;
+}
+
+.session-title {
+    border-bottom: 1px solid #888;
+    padding: 15px;
 }
