@@ -1,5 +1,7 @@
 import { LaboratorioService } from './../services/laboratorio.service';
 import { Component, OnInit } from '@angular/core';
+import { TokenService } from 'app/services/token.service';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -8,7 +10,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainPageComponent implements OnInit {
 
-  constructor(private laboratorioService: LaboratorioService) { }
+  constructor(private laboratorioService: LaboratorioService,
+    private router: Router,
+     private tokenService: TokenService) { }
 
   laboratorioAtivo: any = null;
 
@@ -18,6 +22,9 @@ export class MainPageComponent implements OnInit {
         return;
       }
       this.laboratorioAtivo = resp;
+      if(this.laboratorioAtivo.matricula == this.tokenService.getMatricula()) {
+        this.router.navigateByUrl("/experimento");
+      }
     })
 
   }

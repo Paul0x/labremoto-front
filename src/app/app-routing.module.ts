@@ -6,6 +6,7 @@ import { WonderwallComponent } from './wonderwall/wonderwall.component';
 import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ExperimentoComponent } from './experimento/experimento.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,8 @@ const routes: Routes = [
     {path: 'logout/:token', component: WonderwallComponent},
     {path: 'setup', component: SetupComponent},
     {path: 'agenda', component: CalendarComponent},
-    {path: 'historico', component: HistoryListComponent}
+    {path: 'historico', component: HistoryListComponent},
+    {path: 'experimento', component: ExperimentoComponent}
 ];
 
 @NgModule({

@@ -22,6 +22,7 @@ import { environment } from 'environments/environment';
 import { MenuComponent } from './menu/menu.component';
 import ptBr from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
+import { ExperimentoModule } from './experimento/experimento.module';
 
 registerLocaleData(ptBr);
 export function tokenGetter() {
@@ -44,6 +45,7 @@ export function tokenGetter() {
     SessionModule,
     MainPageModule,
     NgHttpLoaderModule,
+    ExperimentoModule,
     ToastrModule.forRoot(),
     AppRoutingModule,
      JwtModule.forRoot({

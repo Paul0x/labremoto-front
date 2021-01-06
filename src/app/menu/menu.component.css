@@ -2,10 +2,11 @@
 {
     float: left;
     position: absolute;
-    min-height: 100%;
-    left: 0;    
+    min-height: 110vh;
+    left: 0;   
     background: #b6ccea;
     width: 185px;
+    padding-bottom: 50px;
 }
 .collapsable
 {
