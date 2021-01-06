@@ -1,0 +1,62 @@
+.menu
+{
+    float: left;
+    position: absolute;
+    min-height: 100%;
+    left: 0;    
+    background: #b6ccea;
+    width: 185px;
+}
+.collapsable
+{
+    float: left;
+    padding: 5px;
+    position: absolute;
+    background: #122b58;
+    font-size: .6em;
+    border-bottom-right-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.collapsable-false {
+    margin-left: 185px;
+}
+
+.collapsable-true {
+    margin-left: 0px;
+}
+
+.title {
+    padding: 10px;
+    text-align: center;
+    font-size: 1.2em;
+    background: #122b58;
+    color: #fff;
+    border-bottom: 1px solid #183f86;
+}
+
+.itens .item {
+    display: block;
+    padding: 10px 25px;
+    text-decoration: none;
+    color: #000;
+}
+.itens a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: #183f86;
+}
+.itens .item:hover {
+    text-decoration: none;
+    color: #fff;
+    background: #183f86;
+}
+
+.user {
+    text-align: center;
+    color: #fff;
+    background: #183f86;
+    font-size: .8em;
+    padding: 7px;
+}
