@@ -1,12 +1,66 @@
 <div class='content'>
+<div class='row mt-4'>
+  <div class='col-md-4'>
+      <div class="card">
+          <div class="card-header">
+            Dados do Robô
+          </div>
+          <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <div class='row'>
+                  <div class='col-6'>Velocidade</div>
+                  <div class='col-6'>0 <small>m/s</small></div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class='row'>
+                  <div class='col-6'>Aceleração Motor 1</div>
+                  <div class='col-6'>0 <small>m/s²</small></div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class='row'>
+                  <div class='col-6'>Aceleração Motor 2</div>
+                  <div class='col-6'>0 <small>m/s²</small></div>
+                </div>
+              </li>
+            </ul>
+          <div class="card-body">
+            Velociadde...
+          </div>
+        </div>
 
+  </div>
+
+  <div class='col-md-8 pl-0 pr-0'>
+      <div class="card">
+          <div class="card-header">
+            Câmera
+          </div>
+          <div class="card-body" id="camera-wrap">
+            IMAGEM
+          </div>
+        </div>
+
+  </div>
+</div>
 
 </div>
 <div id='low-bar'>
-    <div class='row'>
-      <div class='col-md-3 col-sm-12'>
-      <span class="badge badge-success">Sessão Ativa</span> até <countdown [config]="{leftTime: 30}"></countdown>
+  <div class='row'>
+    <div class='col-md-1 col-sm-12 left-bottom'>
+      <div class='row'>
+        <div class='col-md-12'>
+          <span class="badge badge-success">Sessão Ativa</span>
+        </div>
+        <div class='col-md-12'>
+          <countdown *ngIf='sessionCountdown != null' [config]="sessionCountdown"></countdown>
+        </div>
+      </div>
     </div>
+    <div class='col-md-11 col-sm-12'>
+      Nenhum experimento rodando.
+      <button class='btn btn-light btn-sm' type="button">Iniciar Experimento</button>
     </div>
-
+  </div>
 </div>

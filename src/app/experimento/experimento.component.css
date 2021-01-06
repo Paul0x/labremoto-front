@@ -6,5 +6,15 @@
     right: 0;
     background: #183f86;
     padding: 20px;
+    color: #fff;
+    font-size: .9em;
 
+}
+
+#low-bar .left-bottom {
+    border-right: 1px solid #fff;
+}
+
+#camera-wrap {
+    width: 100%;
 }

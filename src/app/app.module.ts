@@ -58,12 +58,12 @@ export function tokenGetter() {
     })
   ],
   providers: [SharedDataService, LoginService, TokenService, LaboratorioService,
-
+    ToastrService,
     { provide: LOCALE_ID, useValue: 'pt-PT' },
     {
       provide: HTTP_INTERCEPTORS,
-      useFactory: function(token: TokenService, router: Router, toaster: ToastrService, http: HttpClient) {
-          return new HeaderInterceptorService(token, router, toaster, http);
+      useFactory: function(token: TokenService, router: Router, toastr: ToastrService, http: HttpClient) {
+          return new HeaderInterceptorService(token, router, toastr, http);
       },
       multi: true,
       deps: [TokenService, Router, ToastrService, HttpClient]

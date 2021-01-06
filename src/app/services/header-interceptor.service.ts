@@ -13,7 +13,7 @@ import { environment } from 'environments/environment';
 @Injectable()
 export class HeaderInterceptorService implements HttpInterceptor {
 
-  constructor(private token: TokenService, private router: Router, private toastr: ToastrService, private httpClient: HttpClient) { }
+  constructor(private token: TokenService, private router: Router,private toastr: ToastrService, private httpClient: HttpClient) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (typeof (this.token.getToken()) === 'undefined' || this.token.getToken() === null) {
 
