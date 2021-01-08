@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LaboratorioService } from 'app/services/laboratorio.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'app/services/token.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-experimento',
@@ -17,7 +18,13 @@ export class ExperimentoComponent implements OnInit {
   sessaoAtiva: any = null;
   user: any = null;
   sessionCountdown = null;
+  cameraVideoUrl;
+  cameraTimestamp = 0;
+  interval;
+
   ngOnInit() {
+    this.interval = setInterval(() => { this.updateCameraTimestamp(); }, 300);
+    this.cameraVideoUrl = environment.URLS.cameraImg;
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
       if (resp == null || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
         this.router.navigateByUrl("/");
@@ -34,6 +41,14 @@ export class ExperimentoComponent implements OnInit {
         this.user = this.tokenService.getNome();
       }
     });
+  }
+
+  getCameraImage() {
+    return this.cameraVideoUrl + "?t" + this.cameraTimestamp;
+  }
+
+  updateCameraTimestamp() {
+    this.cameraTimestamp++;
   }
 
 }

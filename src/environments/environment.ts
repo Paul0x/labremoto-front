@@ -7,10 +7,11 @@ import URLS from './urls';
 
 const serverUrl = 'http://localhost/labremoto';
 const baseUrl = 'http://localhost:4200';
+const flaskUrl = 'http://localhost:5000'
 export const environment = {
   production: false,
   BASE_REF: baseUrl,
-  URLS: URLS.env(serverUrl, baseUrl, serverUrl)
+  URLS: URLS.env(serverUrl, baseUrl, serverUrl, flaskUrl)
 };
 
 /*

@@ -18,3 +18,7 @@
 #camera-wrap {
     width: 100%;
 }
+
+#camera-image {
+    max-width: 100%;
+}
