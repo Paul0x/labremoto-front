@@ -6,7 +6,8 @@ export default class URLS {
             login:                            HOST + '/login',
             sessaoAtiva:                      HOST + '/laboratorio/sessao-ativa',
             startSession:                     HOST + '/laboratorio/sessao',
-            cameraImg:                        FLASK_REF + '/static/imgVideo.jpg'
+            cameraImg:                        FLASK_REF + '/static/imgVideo.jpg',
+            ev3Data:                          FLASK_REF + '/static/ev3data.json'
           };
         }
     }

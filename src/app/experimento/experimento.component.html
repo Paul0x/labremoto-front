@@ -9,25 +9,25 @@
               <li class="list-group-item">
                 <div class='row'>
                   <div class='col-6'>Velocidade Linear</div>
-                  <div class='col-6'>0 <small>m/s</small></div>
+                  <div class='col-6'>{{ ev3Data.linearVel }} <small>m/s</small></div>
                 </div>
               </li>
               <li class="list-group-item">
                 <div class='row'>
                   <div class='col-6'>Velocidade Angular</div>
-                  <div class='col-6'>0 <small>m/s</small></div>
+                  <div class='col-6'>{{ ev3Data.angularVel }} <small>m/s</small></div>
                 </div>
               </li>
               <li class="list-group-item">
                 <div class='row'>
                   <div class='col-6'>Pos. Atual</div>
-                  <div class='col-6'>(0 <small>x</small>,0 <small>y</small>)</div>
+                  <div class='col-6'>({{ ev3Data.currentPosX }} <small>x</small>,{{ ev3Data.currentPosY }} <small>y</small>)</div>
                 </div>
               </li>
               <li class="list-group-item">
                 <div class='row'>
                   <div class='col-6'>Pos. Objetivo</div>
-                  <div class='col-6'>(0 <small>x</small>,0 <small>y</small>)</div>
+                  <div class='col-6'>({{ ev3Data.goalPosX }} <small>x</small>,{{ ev3Data.goalPosY }} <small>y</small>)</div>
                 </div>
               </li>
             </ul>

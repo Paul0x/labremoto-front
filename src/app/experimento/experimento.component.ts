@@ -3,6 +3,8 @@ import { LaboratorioService } from 'app/services/laboratorio.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'app/services/token.service';
 import { environment } from 'environments/environment';
+import { ExperimentoService } from './experimento.service';
+import { Ev3Data } from './entities/ev3data';
 
 @Component({
   selector: 'app-experimento',
@@ -13,6 +15,7 @@ export class ExperimentoComponent implements OnInit {
 
   constructor(private labolatorioService: LaboratorioService,
     private tokenService: TokenService,
+    private experimentoService: ExperimentoService,
     private router: Router) { }
 
   sessaoAtiva: any = null;
@@ -22,8 +25,10 @@ export class ExperimentoComponent implements OnInit {
   cameraTimestamp = 0;
   interval;
 
+  ev3Data: Ev3Data = new Ev3Data();
+
   ngOnInit() {
-    this.interval = setInterval(() => { this.updateCameraTimestamp(); }, 300);
+    this.interval = setInterval(() => { this.updateExperimentoData(); }, 300);
     this.cameraVideoUrl = environment.URLS.cameraImg;
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
       if (resp == null || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
@@ -47,8 +52,15 @@ export class ExperimentoComponent implements OnInit {
     return this.cameraVideoUrl + "?t" + this.cameraTimestamp;
   }
 
-  updateCameraTimestamp() {
+  updateExperimentoData() {
     this.cameraTimestamp++;
+    this.getEv3Data()
+  }
+
+  getEv3Data() {
+    this.experimentoService.getEv3Data(this.cameraTimestamp).subscribe((resp: Ev3Data) => {
+      this.ev3Data = resp;
+    });
   }
 
 }
