@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LaboratorioService } from 'app/services/laboratorio.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'app/services/token.service';
@@ -11,7 +11,7 @@ import { Ev3Data } from './entities/ev3data';
   templateUrl: './experimento.component.html',
   styleUrls: ['./experimento.component.css']
 })
-export class ExperimentoComponent implements OnInit {
+export class ExperimentoComponent implements OnInit, OnDestroy {
 
   constructor(private labolatorioService: LaboratorioService,
     private tokenService: TokenService,
@@ -27,8 +27,11 @@ export class ExperimentoComponent implements OnInit {
 
   ev3Data: Ev3Data = new Ev3Data();
 
+  ngOnDestroy() {
+    clearInterval(this.interval);
+  }
   ngOnInit() {
-    this.interval = setInterval(() => { this.updateExperimentoData(); }, 300);
+    this.interval = setInterval(() => { this.updateExperimentoData(); }, 15);
     this.cameraVideoUrl = environment.URLS.cameraImg;
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
       if (resp == null || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
