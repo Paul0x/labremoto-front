@@ -1,55 +1,56 @@
 <div class='content'>
-<div class='row mt-4'>
-  <div class='col-md-4'>
+  <div class='row mt-4'>
+    <div class='col-md-4'>
       <div class="card">
-          <div class="card-header">
-            Dados do Robô
-          </div>
-          <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                <div class='row'>
-                  <div class='col-6'>Velocidade Linear</div>
-                  <div class='col-6'>{{ ev3Data.linearVel }} <small>m/s</small></div>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class='row'>
-                  <div class='col-6'>Velocidade Angular</div>
-                  <div class='col-6'>{{ ev3Data.angularVel }} <small>m/s</small></div>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class='row'>
-                  <div class='col-6'>Pos. Atual</div>
-                  <div class='col-6'>({{ ev3Data.currentPosX }} <small>x</small>,{{ ev3Data.currentPosY }} <small>y</small>)</div>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class='row'>
-                  <div class='col-6'>Pos. Objetivo</div>
-                  <div class='col-6'>({{ ev3Data.goalPosX }} <small>x</small>,{{ ev3Data.goalPosY }} <small>y</small>)</div>
-                </div>
-              </li>
-            </ul>
-          <div class="card-body">
-            
-          </div>
+        <div class="card-header">
+          Dados do Robô
         </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <div class='row'>
+              <div class='col-6'>Velocidade Linear</div>
+              <div class='col-6'>{{ ev3Data.linearVel }} <small>m/s</small></div>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class='row'>
+              <div class='col-6'>Velocidade Angular</div>
+              <div class='col-6'>{{ ev3Data.angularVel }} <small>m/s</small></div>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class='row'>
+              <div class='col-6'>Pos. Atual</div>
+              <div class='col-6'>({{ ev3Data.currentPosX }} <small>x</small>,{{ ev3Data.currentPosY }} <small>y</small>)
+              </div>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class='row'>
+              <div class='col-6'>Pos. Objetivo</div>
+              <div class='col-6'>({{ ev3Data.goalPosX }} <small>x</small>,{{ ev3Data.goalPosY }} <small>y</small>)</div>
+            </div>
+          </li>
+        </ul>
+        <div class="card-body">
 
-  </div>
+        </div>
+      </div>
 
-  <div class='col-md-8 pl-0 pr-0'>
+    </div>
+
+    <div class='col-md-8 pl-0 pr-0'>
       <div class="card">
-          <div class="card-header">
-            Câmera
-          </div>
-          <div class="card-body" id="camera-wrap">
-            <img src='{{ getCameraImage() }}' id='camera-image' />
-          </div>
+        <div class="card-header">
+          Câmera
         </div>
+        <div class="card-body" id="camera-wrap">
+          <img src='{{ getCameraImage() }}' id='camera-image' />
+        </div>
+      </div>
 
+    </div>
   </div>
-</div>
 
 </div>
 <div id='low-bar'>
@@ -64,9 +65,41 @@
         </div>
       </div>
     </div>
-    <div class='col-md-11 col-sm-12'>
+    <div class='col-md-11 col-sm-12' *ngIf='currentExperimento == null'>
       Nenhum experimento rodando.
-      <button class='btn btn-light btn-sm' type="button">Iniciar Experimento</button>
+      <button class='btn btn-light btn-sm' type="button" (click)='openNewExperimentoModal()'>Iniciar
+        Experimento</button>
     </div>
+    <ng-container *ngIf='currentExperimento != null'>
+      <div class='col-md-8 col-sm-12'>
+        Experimento: {{ currentExperimento.label }}
+      </div>
+
+      <div class='col-md-3 col-sm-12 ml-auto text-right'>
+        <span class='fa fa-play-circle play-experimento control-experimento'></span>
+          <span class='fa fa-stop-circle stop-experimento control-experimento'></span>
+      </div>
+    </ng-container>
+
   </div>
 </div>
+
+<modal-alert title='Iniciar Novo Experimento' modalId='novoExperimentoModal' noButtons=true modalSize=1>
+  <div class='card'>
+    <div class='card-body'>
+      <div class='row'>
+        <div class='col-md-12'></div>
+      </div>
+      <div class='row'>
+        <div *ngFor="let experimento of experimentos" class='col-md-4 p-2 col-sm-12 experimento-select'>
+          <div class='experimento-select-wrap' (click)="startExperimento(experimento.codigo)">
+            {{ experimento.label }}
+            <div class='experimento-desc'>
+              {{ experimento.descricao }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</modal-alert>

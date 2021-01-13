@@ -22,3 +22,32 @@
 #camera-image {
     max-width: 100%;
 }
+
+.experimento-select-wrap
+{
+    text-align: center;
+    font-size: 1.2em;
+    border: 1px solid #666;
+    border-radius: 3px;
+    padding-top: 10px;
+    user-select: none;
+}
+
+.experimento-select-wrap:hover {
+    cursor: pointer;
+    background: #ddd;
+}
+
+.experimento-desc
+{
+    font-size: 12px;
+    text-align: justify;
+    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px solid #666;
+}
+
+.control-experimento {
+    font-size: 40px;
+    margin: 5px;
+}

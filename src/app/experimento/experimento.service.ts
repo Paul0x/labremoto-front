@@ -12,4 +12,17 @@ export class ExperimentoService {
   getEv3Data(timeStamp: number) {
     return this.http.get(environment.URLS.ev3Data + '?' + timeStamp);
   }
+
+  getExperimentos() {
+    return this.http.get(environment.URLS.getExperimentos);
+  }
+
+  startExperimento(codigo: number) {
+    return this.http.post(environment.URLS.setExperimento,{ codigo: codigo}, { observe: 'response' });
+  }
+
+  getExperimentoAtivo() {
+    return this.http.get(environment.URLS.getExperimentoAtivo);
+  }
+
 }

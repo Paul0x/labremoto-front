@@ -3,12 +3,15 @@
     [style.z-index]="zIndex" [style.display]="showDisplay()">
     <div class="modal-dialog {{modalSizeClass}}" role="document">
         <div class="modal-content">
-            <div class="modal-header"> <button *ngIf="!triggerOnClose" type="button" class="close" data-dismiss="modal"
-                    aria-label="Close"><span aria-hidden="true">&times;</span></button> <button *ngIf="triggerOnClose"
+            <div class="modal-header">
+                    <h4 class="modal-title text-center" id="{{modalId}}Label">{{title}}</h4>
+             
+                <button *ngIf="!triggerOnClose" type="button" class="close" data-dismiss="modal"
+                    aria-label="Close"><span aria-hidden="true">&times;</span></button> 
+                    <button *ngIf="triggerOnClose"
                     type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeFn()"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title text-center" id="{{modalId}}Label">{{title}}</h4>
-            </div>
+                </div>
             <div class="modal-body">
                 <div *ngIf="body !== null"> {{body}} </div>
                 <ng-content *ngIf="body === null"></ng-content>

@@ -6,6 +6,9 @@ import { environment } from 'environments/environment';
 import { ExperimentoService } from './experimento.service';
 import { Ev3Data } from './entities/ev3data';
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'app-experimento',
   templateUrl: './experimento.component.html',
@@ -24,6 +27,8 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   cameraVideoUrl;
   cameraTimestamp = 0;
   interval;
+  currentExperimento = null;
+  experimentos = [];
 
   ev3Data: Ev3Data = new Ev3Data();
 
@@ -32,10 +37,11 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit() {
-    this.interval = setInterval(() => { this.updateExperimentoData(); }, 15);
+    this.interval = setInterval(() => { this.updateExperimentoData(); }, 153000);
     this.cameraVideoUrl = environment.URLS.cameraImg;
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
-      if (resp == null || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
+      console.log(resp)
+      if (resp == null || resp == undefined ||  resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
         this.router.navigateByUrl("/");
       } else {
         this.sessaoAtiva = resp;
@@ -50,6 +56,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
         this.user = this.tokenService.getNome();
       }
     });
+    this.getExperimentoAtivo();
   }
 
   getCameraImage() {
@@ -65,6 +72,35 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
     this.experimentoService.getEv3Data(this.cameraTimestamp).subscribe((resp: Ev3Data) => {
       this.ev3Data = resp;
     });
+  }
+
+  openNewExperimentoModal() {
+    $('#novoExperimentoModal').modal('show');
+    this.experimentoService.getExperimentos().subscribe((resp: any) => {
+      this.experimentos = resp;
+    });
+  }
+
+  startExperimento(codigo: number) {
+    if(isNaN(codigo)) {
+      return;
+    }
+
+    this.experimentoService.startExperimento(codigo).subscribe((resp: any) => {
+      if(resp.status === 200) {
+        
+      }
+
+    }, (err: any) => {
+
+    });
+
+  }
+
+  getExperimentoAtivo() {
+    this.experimentoService.getExperimentoAtivo().subscribe((resp: any) => {
+      this.currentExperimento = resp;
+    })
   }
 
 }
