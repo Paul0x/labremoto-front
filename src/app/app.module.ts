@@ -23,6 +23,7 @@ import { MenuComponent } from './menu/menu.component';
 import ptBr from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 import { ExperimentoModule } from './experimento/experimento.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 registerLocaleData(ptBr);
 export function tokenGetter() {
@@ -46,7 +47,11 @@ export function tokenGetter() {
     MainPageModule,
     NgHttpLoaderModule,
     ExperimentoModule,
-    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 1000,
+      positionClass: 'toast-bottom-right'
+    }),
     AppRoutingModule,
      JwtModule.forRoot({
       config: {

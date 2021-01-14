@@ -26,11 +26,16 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   cameraTimestamp = 0;
   interval;
   currentExperimento = null;
+  currentExperimentoInstrucoes = [];
   experimentos = [];
 
   ev3Data: Ev3Data = new Ev3Data();
   experimentoParametroForm: FormGroup;
 
+  parametrosSalvosErr = false;
+  parametrosSalvosOk = false;
+
+  expInstrucaoForm: FormGroup;
 
   constructor(private labolatorioService: LaboratorioService,
     private tokenService: TokenService,
@@ -47,7 +52,6 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
     this.interval = setInterval(() => { this.updateExperimentoData(); }, 153000);
     this.cameraVideoUrl = environment.URLS.cameraImg;
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
-      console.log(resp)
       if (resp == null || resp == undefined || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
         this.router.navigateByUrl("/");
       } else {
@@ -61,9 +65,9 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
           leftTime: countDown
         }
         this.user = this.tokenService.getNome();
+        this.getExperimentoAtivo();
       }
     });
-    this.getExperimentoAtivo();
   }
 
   getCameraImage() {
@@ -117,9 +121,27 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
             ki: new FormControl(0, Validators.required),
           }
         );
+        this.getExperimentoParametros();
 
       }
     })
+  }
+
+  getExperimentoParametros() {
+    if (this.currentExperimento == null) {
+      return;
+    }
+
+    this.experimentoService.getExperimentoParametros(this.currentExperimento.codigo).subscribe((resp: any) => {
+      this.experimentoParametroForm.get("obstaculos").setValue(Boolean(resp.obstaculos));
+      this.experimentoParametroForm.get("kp").setValue(resp.kp);
+      this.experimentoParametroForm.get("ki").setValue(resp.ki);
+      this.experimentoParametroForm.get("kd").setValue(resp.kd);
+      if (this.currentExperimento.codExperimento === 1) {
+        this.experimentoParametroForm.get("algoritmoBusca").setValue(resp.algoritmoBusca);
+      }
+    });
+
   }
 
   salvarParametrosExperimento() {
@@ -136,15 +158,36 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
     parametrosRequest.kd = this.experimentoParametroForm.get("kd").value;
 
     this.experimentoService.setExperimentoParametros(parametrosRequest).subscribe((resp: any) => {
-      console.log(resp);
-      if(resp.body === true) {
-        this.toastrService.success("Parâmetros salvos com sucesso.", "Sucesso", {
-          positionClass: "toast-top-center",
-          progressBar: true
-        });
+      if (resp.body === true) {
+        this.toastrService.success("Parâmetros salvos com sucesso.", "Sucesso");
+        this.parametrosSalvosErr = false;
+        this.parametrosSalvosOk = true;
+      } else {
+        this.parametrosSalvosErr = true;
+        this.parametrosSalvosOk = false;
       }
-
+    }, (err: any) => {
+      this.parametrosSalvosErr = true;
+      this.parametrosSalvosOk = false;
     });
+
+  }
+
+  openInstrucoesModal() {
+    $('#instrucoesModal').modal('show');
+    this.expInstrucaoForm = this.formBuilder.group({
+      tipoInstrucao: new FormControl(1),
+      velLinear: new FormControl(null),
+      velAngular: new FormControl(null),
+      rotAngulo: new FormControl(null),
+      timer: new FormControl(null)
+    });
+  }
+
+  resetExpInstrucaoQuant() {
+    this.expInstrucaoForm.get("velLinear").setValue(null);
+    this.expInstrucaoForm.get("velAngular").setValue(null);
+    this.expInstrucaoForm.get("rotAngulo").setValue(null);
 
   }
 

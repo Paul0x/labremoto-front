@@ -5,6 +5,7 @@ import { CountdownModule } from 'ngx-countdown';
 import { ExperimentoService } from './experimento.service';
 import { ComponentsModule } from 'app/components/components.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [ExperimentoComponent],

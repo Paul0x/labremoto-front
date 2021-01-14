@@ -60,6 +60,18 @@ export class ModalAlertComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    switch (this.modalSize) {
+      case 1:
+        this.modalSizeClass = 'modal-lg';
+        break;
+      case 2:
+        this.modalSizeClass = 'modal-sm';
+        break;
+      case 3:
+        this.modalSizeClass = 'modal-gg';
+        break;
+    }
+
     $(document).ready(function () {
       // Código para parar o vídeo do youtube quando o modal é fechado.
       $('.modal').each(function () {
@@ -71,15 +83,6 @@ export class ModalAlertComponent implements OnInit {
 
         });
       });
-
-      switch (this.modalSize) {
-        case 1:
-          this.modalSizeClass = 'modal-lg';
-          break;
-        case 2:
-          this.modalSizeClass = 'modal-sm';
-      }
-
     });
   }
 
@@ -102,6 +105,6 @@ export class ModalAlertComponent implements OnInit {
   }
 
   showDisplay() {
-    return (this.block ) ? 'block' : 'none';
+    return (this.block) ? 'block' : 'none';
   }
 }

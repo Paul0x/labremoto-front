@@ -59,3 +59,9 @@
     font-size: 1.2em;
     color: rgba(0,0,0,.525);
 }
+
+.instrucoes-wrap
+{
+    margin: 8px;
+    margin-bottom: 20px;
+}

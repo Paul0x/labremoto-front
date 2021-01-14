@@ -19,15 +19,19 @@ export class ExperimentoService {
   }
 
   startExperimento(codigo: number) {
-    return this.http.post(environment.URLS.setExperimento,{ codigo: codigo}, { observe: 'response' });
+    return this.http.post(environment.URLS.setExperimento, { codigo: codigo }, { observe: 'response' });
   }
 
   getExperimentoAtivo() {
     return this.http.get(environment.URLS.getExperimentoAtivo);
   }
 
+  getExperimentoParametros(codigo: number) {
+    return this.http.get(environment.URLS.experimentoParametros + "&codigo=" + codigo);
+  }
+
   setExperimentoParametros(parametros: ParametrosExperimentoRequest) {
-    return this.http.post(environment.URLS.experimentoParametros, parametros, {observe: "response"});
+    return this.http.post(environment.URLS.experimentoParametros, parametros, { observe: "response" });
   }
 
 }

@@ -77,7 +77,7 @@
                 </div>
                 <div class='col-md-7'>
                   <div class='form-group'>
-                    <input class='form-control' type='number' id='deInputKp' formControlName="kp"/>
+                    <input class='form-control' type='number' id='deInputKp' formControlName="kp" />
                   </div>
                 </div>
               </div>
@@ -87,7 +87,7 @@
                 </div>
                 <div class='col-md-7'>
                   <div class='form-group'>
-                    <input class='form-control' type='number' id='deInputKd' formControlName="kd"/>
+                    <input class='form-control' type='number' id='deInputKd' formControlName="kd" />
                   </div>
                 </div>
               </div>
@@ -97,13 +97,21 @@
                 </div>
                 <div class='col-md-7'>
                   <div class='form-group'>
-                    <input class='form-control' type='number' id='deInputKi' formControlName="ki"/>
+                    <input class='form-control' type='number' id='deInputKi' formControlName="ki" />
                   </div>
                 </div>
               </div>
               <div class='row'>
                 <div class='col-md-12'>
-                  <button class='btn btn-primary' type='button' (click)="salvarParametrosExperimento()">Salvar Parâmetros</button>
+                  <button class='btn btn-primary btn-block' style='margin-bottom: 10px;' type='button'
+                    (click)="salvarParametrosExperimento()">Salvar
+                    Parâmetros</button>
+                  <div class="alert alert-success" role="alert" *ngIf='parametrosSalvosOk'>
+                    Os parâmetros foram salvos com sucesso.
+                  </div>
+                  <div class="alert alert-warning" role="alert" *ngIf='parametrosSalvosErr'>
+                    Ocorreu um erro ao salvar os parâmetros, verifique seu formulário e tente novamente.
+                  </div>
                 </div>
               </div>
             </form>
@@ -113,13 +121,14 @@
 
           <div class="card-body">
             Adicione instruções de trajetória para o robô e depois rode o experimento.
-            <h4 class='dados-experimento-title'>Parâmetros</h4>
+            <h4 class='dados-experimento-title'>Instruções de Trajetória</h4>
             <div class='row'>
-              <div class='col-md-12'>
+              <div class='col-md-12 instrucoes-wrap'>
                 Nenhuma instrução cadastrada
               </div>
               <div class='col-md-12'>
-                <button class='btn btn-primary' type='button'>Alterar Instruções</button>
+                <button class='btn btn-primary btn-block' type='button' (click)="openInstrucoesModal()">Alterar
+                  Instruções</button>
               </div>
             </div>
             <h4 class='dados-experimento-title'>Parâmetros</h4>
@@ -169,7 +178,15 @@
               </div>
               <div class='row'>
                 <div class='col-md-12'>
-                  <button class='btn btn-primary' type='button' (click)="salvarParametrosExperimento()">Salvar Parâmetros</button>
+                  <button class='btn btn-primary btn-block' style='margin-bottom: 10px;' type='button'
+                    (click)="salvarParametrosExperimento()">Salvar
+                    Parâmetros</button>
+                  <div class="alert alert-success" role="alert" *ngIf='parametrosSalvosOk'>
+                    Os parâmetros foram salvos com sucesso.
+                  </div>
+                  <div class="alert alert-warning" role="alert" *ngIf='parametrosSalvosErr'>
+                    Ocorreu um erro ao salvar os parâmetros, verifique seu formulário e tente novamente.
+                  </div>
                 </div>
               </div>
             </form>
@@ -244,4 +261,107 @@
       </div>
     </div>
   </div>
+</modal-alert>
+
+<modal-alert title='Instruções da Trajetória' modalSize="3" modalId='instrucoesModal' noButtons="true">
+  <div class='alert alert-info'>
+    Adicione abaixo as instruções que o robô deve realizar no experimento.<br />
+    Cada instrução é composta por uma ação, uma quantização da instrução e (ou) um tempo de duração para a mesma.
+    <br /><br />
+    <small>Obs: você também pode importar e exportar as ações, para reutilizar em outros experimentos.</small>
+  </div>
+  <div *ngIf='currentExperimentoInstrucoes.length == 0'>
+    Não há instruções para esse experimento.
+  </div>
+  <div *ngIf='currentExperimentoInstrucoes.length > 0'>
+    sa
+  </div>
+  <form [formGroup]="expInstrucaoForm" *ngIf='expInstrucaoForm != undefined' class='form-inline'>
+    <select class="form-control col-md-2" id="expInstrucaoTipo" formControlName="tipoInstrucao"
+      (change)="resetExpInstrucaoQuant()">
+      <option value="1">Andar Reto</option>
+      <option value="2">Realizar Curva</option>
+      <option value="3">Rotacionar</option>
+      <option value="4">Parar</option>
+    </select>
+    <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 1'>
+      <div class="input-group col-md-6">
+        <input type="text" class="form-control" placeholder="Velocidade Linear" formControlName="velLinear">
+        <div class="input-group-append">
+          <div class="input-group-text">m/s</div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 2'>
+      <div class="input-group col-md-3">
+        <input type="text" class="form-control" placeholder="Velocidade Linear" formControlName="velLinear">
+        <div class="input-group-append">
+          <div class="input-group-text">m/s</div>
+        </div>
+      </div>
+      <div class="input-group col-md-3">
+        <input type="text" class="form-control" placeholder="Velocidade Angular" formControlName="velAngular">
+        <div class="input-group-append">
+          <div class="input-group-text">m/s</div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 3'>
+      <div class="input-group col-md-6">
+        <input type="text" class="form-control" placeholder="Ângulo de Rotação" formControlName="velLinear">
+        <div class="input-group-append">
+          <div class="input-group-text">º</div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 4'>
+      <div class="input-group col-md-6">
+        <input type="text" class="form-control" disabled placeholder="-">
+      </div>
+    </ng-container>
+    <div class="input-group col-md-3">
+      <input type="text" class="form-control" placeholder="Duração">
+      <div class="input-group-append">
+        <div class="input-group-text">ms</div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2 btn-block">Submit</button>
+  </form>
+  <form *ngIf="false">
+    <div class='row'>
+      <div class='col-md-4'>
+        <div class='form-group'>
+          <div class='form-group'>
+            <select class="form-control" id="expInstrucaoTipo" formControlName="tipoInstrucao"
+              (change)="resetExpInstrucaoQuant()">
+              <option value="1">Andar Reto</option>
+              <option value="2">Realizar Curva</option>
+              <option value="3">Rotacionar</option>
+              <option value="4">Parar</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class='col-md-4'>
+        <div class='form-group'>
+          <input type='text' class='form-control' placeholder="Velocidade Linear"
+            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 1' formControlName="velLinear" />
+          <input type='text' class='form-control' placeholder="Velocidade Linear"
+            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 2' formControlName="velLinear" />
+          <input type='text' class='form-control' placeholder="Velocidade Angular"
+            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 2' formControlName="velAngular" />
+          <input type='text' class='form-control' placeholder="Ângulo Rotação"
+            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 3' formControlName="rotAngulo" />
+          <input type='text' class='form-control' placeholder="-" disabled
+            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 4' />
+        </div>
+      </div>
+      <div class='col-md-4'>
+        <div class='form-group'>
+          <input type='text' class='form-control' placeholder="Tempo de Duração (ms)" formControlName="timer" />
+        </div>
+      </div>
+    </div>
+  </form>
 </modal-alert>
