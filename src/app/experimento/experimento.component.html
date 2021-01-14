@@ -32,10 +32,152 @@
             </div>
           </li>
         </ul>
-        <div class="card-body">
-
-        </div>
       </div>
+
+      <div class="card" style='margin-top: 20px; margin-bottom: 35%;' *ngIf='currentExperimento != null'>
+        <div class="card-header">
+          Dados do Experimento
+        </div>
+        <ng-container *ngIf='currentExperimento.codExperimento == 1'>
+
+          <div class="card-body">
+            Clique na imagem da câmera para o robô se direcionar até a posição informada.
+            <h4 class='dados-experimento-title'>Parâmetros</h4>
+            <form [formGroup]="experimentoParametroForm">
+              <div class='row'>
+                <div class='col-md-5'>
+                  <label for='deInputAlgoritmoBusca'>Algoritmo de Busca</label>
+                </div>
+                <div class='col-md-7'>
+                  <div class='form-group'>
+                    <select class="form-control" id="deInputAlgoritmoBusca" formControlName="algoritmoBusca">
+                      <option value="1">Astar (A*)</option>
+                      <option value="2">RRT</option>
+                      <option value="3">Desabilitado</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-md-5'>
+                  <label for='deInputObstaculos'>Checagem Obstáculos</label>
+                </div>
+                <div class='col-md-7'>
+                  <div class='form-group'>
+                    <select class="form-control" id="deInputObstaculos" formControlName="obstaculos">
+                      <option value="true">Habilitado</option>
+                      <option value="false">Desabilitado</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-md-5'>
+                  <label for='deInputKp'>Kp (PID)</label>
+                </div>
+                <div class='col-md-7'>
+                  <div class='form-group'>
+                    <input class='form-control' type='number' id='deInputKp' formControlName="kp"/>
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-md-5'>
+                  <label for='deInputKd'>Kd (PID)</label>
+                </div>
+                <div class='col-md-7'>
+                  <div class='form-group'>
+                    <input class='form-control' type='number' id='deInputKd' formControlName="kd"/>
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-md-5'>
+                  <label for='deInputKi'>Ki (PID)</label>
+                </div>
+                <div class='col-md-7'>
+                  <div class='form-group'>
+                    <input class='form-control' type='number' id='deInputKi' formControlName="ki"/>
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-md-12'>
+                  <button class='btn btn-primary' type='button' (click)="salvarParametrosExperimento()">Salvar Parâmetros</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </ng-container>
+        <ng-container *ngIf='currentExperimento.codExperimento == 2'>
+
+          <div class="card-body">
+            Adicione instruções de trajetória para o robô e depois rode o experimento.
+            <h4 class='dados-experimento-title'>Parâmetros</h4>
+            <div class='row'>
+              <div class='col-md-12'>
+                Nenhuma instrução cadastrada
+              </div>
+              <div class='col-md-12'>
+                <button class='btn btn-primary' type='button'>Alterar Instruções</button>
+              </div>
+            </div>
+            <h4 class='dados-experimento-title'>Parâmetros</h4>
+            <form [formGroup]="experimentoParametroForm">
+              <div class='row'>
+                <div class='col-md-5'>
+                  <label for='deInputObstaculos'>Checagem Obstáculos</label>
+                </div>
+                <div class='col-md-7'>
+                  <div class='form-group'>
+                    <select class="form-control" id="deInputObstaculos" formControlName="obstaculos">
+                      <option value="true">Habilitado</option>
+                      <option value="false">Desabilitado</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-md-5'>
+                  <label for='deInputKp'>Kp (PID)</label>
+                </div>
+                <div class='col-md-7'>
+                  <div class='form-group'>
+                    <input class='form-control' formControlName="kp" type='number' id='deInputKp' />
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-md-5'>
+                  <label for='deInputKd'>Kd (PID)</label>
+                </div>
+                <div class='col-md-7'>
+                  <div class='form-group'>
+                    <input class='form-control' type='number' formControlName="kd" id='deInputKd' />
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-md-5'>
+                  <label for='deInputKi'>Ki (PID)</label>
+                </div>
+                <div class='col-md-7'>
+                  <div class='form-group'>
+                    <input class='form-control' type='number' formControlName="ki" id='deInputKi' />
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-md-12'>
+                  <button class='btn btn-primary' type='button' (click)="salvarParametrosExperimento()">Salvar Parâmetros</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </ng-container>
+      </div>
+
+
 
     </div>
 
@@ -77,7 +219,7 @@
 
       <div class='col-md-3 col-sm-12 ml-auto text-right'>
         <span class='fa fa-play-circle play-experimento control-experimento'></span>
-          <span class='fa fa-stop-circle stop-experimento control-experimento'></span>
+        <span class='fa fa-stop-circle stop-experimento control-experimento'></span>
       </div>
     </ng-container>
 

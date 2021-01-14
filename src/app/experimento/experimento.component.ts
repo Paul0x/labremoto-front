@@ -5,6 +5,9 @@ import { TokenService } from 'app/services/token.service';
 import { environment } from 'environments/environment';
 import { ExperimentoService } from './experimento.service';
 import { Ev3Data } from './entities/ev3data';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ParametrosExperimentoRequest } from './entities/parametrosExperimentoRequest';
+import { ToastrService } from 'ngx-toastr';
 
 declare var jquery: any;
 declare var $: any;
@@ -16,11 +19,6 @@ declare var $: any;
 })
 export class ExperimentoComponent implements OnInit, OnDestroy {
 
-  constructor(private labolatorioService: LaboratorioService,
-    private tokenService: TokenService,
-    private experimentoService: ExperimentoService,
-    private router: Router) { }
-
   sessaoAtiva: any = null;
   user: any = null;
   sessionCountdown = null;
@@ -31,25 +29,34 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   experimentos = [];
 
   ev3Data: Ev3Data = new Ev3Data();
+  experimentoParametroForm: FormGroup;
+
+
+  constructor(private labolatorioService: LaboratorioService,
+    private tokenService: TokenService,
+    private toastrService: ToastrService,
+    private experimentoService: ExperimentoService,
+    private formBuilder: FormBuilder,
+    private router: Router) { }
 
   ngOnDestroy() {
     clearInterval(this.interval);
   }
-  
+
   ngOnInit() {
     this.interval = setInterval(() => { this.updateExperimentoData(); }, 153000);
     this.cameraVideoUrl = environment.URLS.cameraImg;
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
       console.log(resp)
-      if (resp == null || resp == undefined ||  resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
+      if (resp == null || resp == undefined || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
         this.router.navigateByUrl("/");
       } else {
         this.sessaoAtiva = resp;
-        this.sessaoAtiva.dt_fim = new Date(resp.dt_fim);
+        this.sessaoAtiva.dtFim = new Date(resp.dtFim);
         const now = new Date();
-        let countDown = Math.floor((this.sessaoAtiva.dt_fim.getTime() - now.getTime())  / 1000);
+        let countDown = Math.floor((this.sessaoAtiva.dtFim.getTime() - now.getTime()) / 1000);
 
-        
+
         this.sessionCountdown = {
           leftTime: countDown
         }
@@ -82,13 +89,13 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   }
 
   startExperimento(codigo: number) {
-    if(isNaN(codigo)) {
+    if (isNaN(codigo)) {
       return;
     }
 
     this.experimentoService.startExperimento(codigo).subscribe((resp: any) => {
-      if(resp.status === 200) {
-        
+      if (resp.status === 200) {
+        window.location.reload();
       }
 
     }, (err: any) => {
@@ -100,7 +107,45 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   getExperimentoAtivo() {
     this.experimentoService.getExperimentoAtivo().subscribe((resp: any) => {
       this.currentExperimento = resp;
+      if (resp != null) {
+        this.experimentoParametroForm = this.formBuilder.group(
+          {
+            algoritmoBusca: new FormControl(1),
+            obstaculos: new FormControl(true, Validators.required),
+            kp: new FormControl(0, Validators.required),
+            kd: new FormControl(0, Validators.required),
+            ki: new FormControl(0, Validators.required),
+          }
+        );
+
+      }
     })
+  }
+
+  salvarParametrosExperimento() {
+    const parametrosRequest = new ParametrosExperimentoRequest();
+    if (this.currentExperimento.codExperimento === 1) {
+      parametrosRequest.algoritmoBusca = this.experimentoParametroForm.get("algoritmoBusca").value;
+    } else {
+      parametrosRequest.algoritmoBusca = 0
+    }
+
+    parametrosRequest.obstaculos = this.experimentoParametroForm.get("obstaculos").value;
+    parametrosRequest.kp = this.experimentoParametroForm.get("kp").value;
+    parametrosRequest.ki = this.experimentoParametroForm.get("ki").value;
+    parametrosRequest.kd = this.experimentoParametroForm.get("kd").value;
+
+    this.experimentoService.setExperimentoParametros(parametrosRequest).subscribe((resp: any) => {
+      console.log(resp);
+      if(resp.body === true) {
+        this.toastrService.success("Parâmetros salvos com sucesso.", "Sucesso", {
+          positionClass: "toast-top-center",
+          progressBar: true
+        });
+      }
+
+    });
+
   }
 
 }

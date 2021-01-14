@@ -4,13 +4,16 @@ import { ExperimentoComponent } from './experimento.component';
 import { CountdownModule } from 'ngx-countdown';
 import { ExperimentoService } from './experimento.service';
 import { ComponentsModule } from 'app/components/components.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ExperimentoComponent],
   imports: [
     CommonModule,
     ComponentsModule,
-    CountdownModule
+    CountdownModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [ExperimentoService]
 })

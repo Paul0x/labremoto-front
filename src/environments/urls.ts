@@ -10,6 +10,8 @@ export default class URLS {
             ev3Data:                          FLASK_REF + '/static/ev3data.json',
             getExperimentos:                  HOST + '/laboratorio/experimentos',
             setExperimento:                   HOST + '/laboratorio/experimento',
+            experimentoParametros:            HOST + '/laboratorio/experimento-parametros',
+            experimentoInstrucoes:            HOST + '/laboratorio/experimento-instrucoes',
             getExperimentoAtivo:              HOST + '/laboratorio/experimento-ativo'
           };
         }

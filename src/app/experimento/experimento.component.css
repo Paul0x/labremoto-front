@@ -51,3 +51,11 @@
     font-size: 40px;
     margin: 5px;
 }
+
+.dados-experimento-title {
+    border-top: 1px solid rgba(0,0,0,.125);
+    padding: 7px 0px;
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: rgba(0,0,0,.525);
+}

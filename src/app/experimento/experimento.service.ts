@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
+import { ParametrosExperimentoRequest } from './entities/parametrosExperimentoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,10 @@ export class ExperimentoService {
 
   getExperimentoAtivo() {
     return this.http.get(environment.URLS.getExperimentoAtivo);
+  }
+
+  setExperimentoParametros(parametros: ParametrosExperimentoRequest) {
+    return this.http.post(environment.URLS.experimentoParametros, parametros, {observe: "response"});
   }
 
 }
