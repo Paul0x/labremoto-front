@@ -1,4 +1,4 @@
-import { PathInstruction } from "./pathInstruction";
+import { InstrucaoTrajetoria } from "./instrucaoTrajetoria";
 import { ColorCalibration } from "./colorCalibration";
 
 export class Ev3Request {
@@ -10,6 +10,6 @@ export class Ev3Request {
     algorithmId: number;
     pidParams: number[];
     colorCalibration: ColorCalibration[];
-    pathInstructions: PathInstruction[];
+    pathInstructions: InstrucaoTrajetoria[];
 
 }

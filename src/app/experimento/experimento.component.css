@@ -60,8 +60,22 @@
     color: rgba(0,0,0,.525);
 }
 
+.instrucoes-list-wrap {
+    margin: 10px auto;
+    border: 1px solid rgba(0,0,0,.125);
+}
+
+.instrucoes-list-wrap .padding {
+    padding: 15px;
+    font-size: 1.2em;
+}
+
 .instrucoes-wrap
 {
     margin: 8px;
     margin-bottom: 20px;
+}
+
+.instrucoes-small {
+    font-size: .7em;
 }

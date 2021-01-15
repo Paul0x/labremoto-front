@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { ParametrosExperimentoRequest } from './entities/parametrosExperimentoRequest';
+import { InstrucaoTrajetoria } from './entities/instrucaoTrajetoria';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,14 @@ export class ExperimentoService {
 
   setExperimentoParametros(parametros: ParametrosExperimentoRequest) {
     return this.http.post(environment.URLS.experimentoParametros, parametros, { observe: "response" });
+  }
+
+  setExperimentoInstrucoes(instrucoes: InstrucaoTrajetoria[]) {
+    return this.http.post(environment.URLS.experimentoInstrucoes, instrucoes, { observe: 'response'});
+  }
+
+  getExperimentoInstrucoes(codigo: number) {
+    return this.http.get(environment.URLS.experimentoInstrucoes + "&codigo=" + codigo);
   }
 
 }

@@ -8,6 +8,7 @@ import { Ev3Data } from './entities/ev3data';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ParametrosExperimentoRequest } from './entities/parametrosExperimentoRequest';
 import { ToastrService } from 'ngx-toastr';
+import { InstrucaoTrajetoria } from './entities/instrucaoTrajetoria';
 
 declare var jquery: any;
 declare var $: any;
@@ -122,7 +123,9 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
           }
         );
         this.getExperimentoParametros();
-
+        if(resp.codExperimento == 2) {
+          this.getExperimentoInstrucoes();
+        } 
       }
     })
   }
@@ -189,6 +192,104 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
     this.expInstrucaoForm.get("velAngular").setValue(null);
     this.expInstrucaoForm.get("rotAngulo").setValue(null);
 
+  }
+
+  addInstrucaoToArray() {
+    const instrucao = new InstrucaoTrajetoria();
+    instrucao.tipo = parseInt(this.expInstrucaoForm.get("tipoInstrucao").value);
+
+    switch (instrucao.tipo) {
+      case 1:
+        instrucao.velLinear = this.expInstrucaoForm.get("velLinear").value;
+        instrucao.timer = this.expInstrucaoForm.get("timer").value;
+        break;
+      case 2:
+        instrucao.velLinear = this.expInstrucaoForm.get("velLinear").value;
+        instrucao.velAngular = this.expInstrucaoForm.get("velAngular").value;
+        instrucao.timer = this.expInstrucaoForm.get("timer").value;
+        break;
+      case 3:
+        instrucao.rotAngulo = this.expInstrucaoForm.get("rotAngulo").value;
+        instrucao.timer = this.expInstrucaoForm.get("timer").value;
+        break;
+      case 4:
+        instrucao.timer = this.expInstrucaoForm.get("timer").value;
+        break;
+    }
+
+    this.currentExperimentoInstrucoes.push(instrucao);
+    this.resetExpInstrucaoQuant();
+    console.log(this.currentExperimentoInstrucoes);
+
+
+  }
+
+  getTipoInstrucaoLabel(tipo: number) {
+    switch (tipo) {
+      case 1:
+        return "Andar Reto";
+      case 2:
+        return "Realizar Curva";
+      case 3:
+        return "Rotacionar";
+      case 4:
+        return "Parar";
+    }
+  }
+
+  getTipoInstrucaoValor(instrucao: InstrucaoTrajetoria) {
+    switch (instrucao.tipo) {
+      case 1:
+        return "Vel Linear: " + instrucao.velLinear + "m/s";
+      case 2:
+        return "Vel Linear: " + instrucao.velLinear + "m/s | Vel Angular: " + instrucao.velLinear + "rad/s";
+      case 3:
+        return "Ângulo: " + instrucao.rotAngulo.toFixed(2) + "º";
+      case 4:
+        return "-";
+    }
+  }
+
+  updateInstrucoesExperimento() {
+    this.experimentoService.setExperimentoInstrucoes(this.currentExperimentoInstrucoes).subscribe((resp: any) => {
+        if(resp.body === true) {
+          $('#instrucoesModal').modal('hide');
+        }
+    });
+  }
+
+  getExperimentoInstrucoes() {
+    this.experimentoService.getExperimentoInstrucoes(this.currentExperimento.codigo).subscribe((resp: any) => {
+      this.currentExperimentoInstrucoes = this.parseInstrucoes(resp);
+    });
+  }
+
+  parseInstrucoes(instrucoesArr: any) {
+    let parsedInstrucoes = [];
+    for(let instrucaoBack of instrucoesArr) {
+      console.log(instrucaoBack);
+      const instrucao = new InstrucaoTrajetoria();
+      instrucao.velLinear = instrucaoBack.velLinear;
+      instrucao.velAngular = instrucaoBack.velAngular;
+      instrucao.timer = instrucaoBack.timer;
+
+      if(instrucao.velLinear == 0 && instrucao.velAngular == 0) {
+        instrucao.tipo = 4;
+      } else if(instrucao.velAngular == 0) {
+        instrucao.tipo = 1;
+      } else if(instrucao.velLinear == 0) {
+        instrucao.tipo = 3;
+        const deltaTheta = instrucao.velAngular * ( instrucao.timer / 1000 );
+        instrucao.rotAngulo = (deltaTheta * (180 / Math.PI));
+      } else {
+        instrucao.tipo = 2
+      }
+
+      parsedInstrucoes.push(instrucao);
+    }
+
+
+    return parsedInstrucoes
   }
 
 }

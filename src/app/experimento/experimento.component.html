@@ -124,7 +124,20 @@
             <h4 class='dados-experimento-title'>Instruções de Trajetória</h4>
             <div class='row'>
               <div class='col-md-12 instrucoes-wrap'>
-                Nenhuma instrução cadastrada
+                <ng-container *ngIf='currentExperimentoInstrucoes.length == 0'>Nenhuma instrução cadastrada.</ng-container>
+                <ng-container *ngIf='currentExperimentoInstrucoes.length > 0'>
+                  <div class='row instrucoes-small' *ngFor='let instrucao of currentExperimentoInstrucoes'>
+                    <div class="col-md-3 col-sm-12">
+                      {{ getTipoInstrucaoLabel(instrucao.tipo) }}
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                      {{ getTipoInstrucaoValor(instrucao) }}
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                      {{ instrucao.timer }}ms
+                    </div>
+                  </div>
+                </ng-container>
               </div>
               <div class='col-md-12'>
                 <button class='btn btn-primary btn-block' type='button' (click)="openInstrucoesModal()">Alterar
@@ -270,98 +283,99 @@
     <br /><br />
     <small>Obs: você também pode importar e exportar as ações, para reutilizar em outros experimentos.</small>
   </div>
-  <div *ngIf='currentExperimentoInstrucoes.length == 0'>
-    Não há instruções para esse experimento.
-  </div>
-  <div *ngIf='currentExperimentoInstrucoes.length > 0'>
-    sa
-  </div>
-  <form [formGroup]="expInstrucaoForm" *ngIf='expInstrucaoForm != undefined' class='form-inline'>
-    <select class="form-control col-md-2" id="expInstrucaoTipo" formControlName="tipoInstrucao"
-      (change)="resetExpInstrucaoQuant()">
-      <option value="1">Andar Reto</option>
-      <option value="2">Realizar Curva</option>
-      <option value="3">Rotacionar</option>
-      <option value="4">Parar</option>
-    </select>
-    <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 1'>
-      <div class="input-group col-md-6">
-        <input type="text" class="form-control" placeholder="Velocidade Linear" formControlName="velLinear">
-        <div class="input-group-append">
-          <div class="input-group-text">m/s</div>
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 2'>
-      <div class="input-group col-md-3">
-        <input type="text" class="form-control" placeholder="Velocidade Linear" formControlName="velLinear">
-        <div class="input-group-append">
-          <div class="input-group-text">m/s</div>
-        </div>
-      </div>
-      <div class="input-group col-md-3">
-        <input type="text" class="form-control" placeholder="Velocidade Angular" formControlName="velAngular">
-        <div class="input-group-append">
-          <div class="input-group-text">m/s</div>
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 3'>
-      <div class="input-group col-md-6">
-        <input type="text" class="form-control" placeholder="Ângulo de Rotação" formControlName="velLinear">
-        <div class="input-group-append">
-          <div class="input-group-text">º</div>
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 4'>
-      <div class="input-group col-md-6">
-        <input type="text" class="form-control" disabled placeholder="-">
-      </div>
-    </ng-container>
-    <div class="input-group col-md-3">
-      <input type="text" class="form-control" placeholder="Duração">
-      <div class="input-group-append">
-        <div class="input-group-text">ms</div>
-      </div>
+  <div class='instrucoes-list-wrap'>
+    <div class='padding' *ngIf='currentExperimentoInstrucoes.length == 0'>
+      Não há instruções para esse experimento.
     </div>
-
-    <button type="submit" class="btn btn-primary mb-2 btn-block">Submit</button>
-  </form>
-  <form *ngIf="false">
-    <div class='row'>
-      <div class='col-md-4'>
-        <div class='form-group'>
-          <div class='form-group'>
-            <select class="form-control" id="expInstrucaoTipo" formControlName="tipoInstrucao"
-              (change)="resetExpInstrucaoQuant()">
-              <option value="1">Andar Reto</option>
-              <option value="2">Realizar Curva</option>
-              <option value="3">Rotacionar</option>
-              <option value="4">Parar</option>
-            </select>
+    <div *ngIf='currentExperimentoInstrucoes.length > 0'>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Tipo</th>
+            <th scope="col" colspan="2">Valores</th>
+            <th scope="col">Tempo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let instrucao of currentExperimentoInstrucoes; let i = index '>
+            <th scope="row">{{ i+1 }}</th>
+            <td>
+              {{ getTipoInstrucaoLabel( instrucao.tipo ) }}
+            </td>
+            <td colspan="2">
+              {{ getTipoInstrucaoValor( instrucao ) }}
+            </td>
+            <td>
+              {{ instrucao.timer }}ms
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class='new-instrucao-wrap card'>
+    <div class='card-header'>
+      Adicionar nova instrução
+    </div>
+    <div class='card-body'>
+      <form [formGroup]="expInstrucaoForm" *ngIf='expInstrucaoForm != undefined' class='form-inline'>
+        <select class="form-control col-md-3" id="expInstrucaoTipo" formControlName="tipoInstrucao"
+          (change)="resetExpInstrucaoQuant()">
+          <option value=1>Andar Reto</option>
+          <option value=2>Realizar Curva</option>
+          <option value=3>Rotacionar</option>
+          <option value=4>Parar</option>
+        </select>
+        <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 1'>
+          <div class="input-group col-md-6">
+            <input type="text" class="form-control" placeholder="Velocidade Linear" formControlName="velLinear">
+            <div class="input-group-append">
+              <div class="input-group-text">m/s</div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 2'>
+          <div class="input-group col-md-3">
+            <input type="text" class="form-control" placeholder="Velocidade Linear" formControlName="velLinear">
+            <div class="input-group-append">
+              <div class="input-group-text">m/s</div>
+            </div>
+          </div>
+          <div class="input-group col-md-3">
+            <input type="text" class="form-control" placeholder="Velocidade Angular" formControlName="velAngular">
+            <div class="input-group-append">
+              <div class="input-group-text">rad/s</div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 3'>
+          <div class="input-group col-md-6">
+            <input type="text" class="form-control" placeholder="Ângulo de Rotação" formControlName="rotAngulo">
+            <div class="input-group-append">
+              <div class="input-group-text">º</div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 4'>
+          <div class="input-group col-md-6">
+            <input type="text" class="form-control" disabled placeholder="-">
+          </div>
+        </ng-container>
+        <div class="input-group col-md-3">
+          <input type="text" formControlName="timer" class="form-control" placeholder="Duração">
+          <div class="input-group-append">
+            <div class="input-group-text">ms</div>
           </div>
         </div>
-      </div>
-      <div class='col-md-4'>
-        <div class='form-group'>
-          <input type='text' class='form-control' placeholder="Velocidade Linear"
-            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 1' formControlName="velLinear" />
-          <input type='text' class='form-control' placeholder="Velocidade Linear"
-            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 2' formControlName="velLinear" />
-          <input type='text' class='form-control' placeholder="Velocidade Angular"
-            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 2' formControlName="velAngular" />
-          <input type='text' class='form-control' placeholder="Ângulo Rotação"
-            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 3' formControlName="rotAngulo" />
-          <input type='text' class='form-control' placeholder="-" disabled
-            *ngIf='expInstrucaoForm.get("tipoInstrucao").value == 4' />
+        <div style="display: block; margin-top: 10px;">
+          <button type="button" class="btn btn-success btn-sm mb-2" (click)='addInstrucaoToArray()'>Adicionar
+            Instrução</button>
         </div>
-      </div>
-      <div class='col-md-4'>
-        <div class='form-group'>
-          <input type='text' class='form-control' placeholder="Tempo de Duração (ms)" formControlName="timer" />
-        </div>
-      </div>
+      </form>
     </div>
-  </form>
+  </div>
+  <div>
+    <button type='button' class='btn btn-primary' (click)='updateInstrucoesExperimento()'>Salvar</button>
+  </div>
 </modal-alert>
