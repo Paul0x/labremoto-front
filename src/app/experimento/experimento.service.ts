@@ -43,4 +43,8 @@ export class ExperimentoService {
     return this.http.get(environment.URLS.experimentoInstrucoes + "&codigo=" + codigo);
   }
 
+  setApontarGoals(goals: any) {
+    return this.http.post(environment.URLS.experimentoGoals, goals, { observe: "response" });
+  }
+
 }

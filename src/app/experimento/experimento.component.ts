@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { LaboratorioService } from 'app/services/laboratorio.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'app/services/token.service';
@@ -9,6 +9,8 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { ParametrosExperimentoRequest } from './entities/parametrosExperimentoRequest';
 import { ToastrService } from 'ngx-toastr';
 import { InstrucaoTrajetoria } from './entities/instrucaoTrajetoria';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
 
 declare var jquery: any;
 declare var $: any;
@@ -18,7 +20,7 @@ declare var $: any;
   templateUrl: './experimento.component.html',
   styleUrls: ['./experimento.component.css']
 })
-export class ExperimentoComponent implements OnInit, OnDestroy {
+export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   sessaoAtiva: any = null;
   user: any = null;
@@ -29,7 +31,10 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   currentExperimento = null;
   currentExperimentoInstrucoes = [];
   experimentos = [];
-
+  apontar = {
+    goalX: 0,
+    goalY: 0
+  }
   ev3Data: Ev3Data = new Ev3Data();
   experimentoParametroForm: FormGroup;
 
@@ -38,6 +43,8 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
 
   expInstrucaoForm: FormGroup;
 
+  @ViewChild('cameraWrap', { static: false }) cameraWrapEl: ElementRef;
+
   constructor(private labolatorioService: LaboratorioService,
     private tokenService: TokenService,
     private toastrService: ToastrService,
@@ -45,11 +52,15 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private router: Router) { }
 
+  ngAfterViewInit() {
+
+  }
   ngOnDestroy() {
     clearInterval(this.interval);
   }
 
   ngOnInit() {
+    this.updateExperimentoData();
     this.interval = setInterval(() => { this.updateExperimentoData(); }, 153000);
     this.cameraVideoUrl = environment.URLS.cameraImg;
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
@@ -69,6 +80,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
         this.getExperimentoAtivo();
       }
     });
+
   }
 
   getCameraImage() {
@@ -123,9 +135,9 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
           }
         );
         this.getExperimentoParametros();
-        if(resp.codExperimento == 2) {
+        if (resp.codExperimento == 2) {
           this.getExperimentoInstrucoes();
-        } 
+        }
       }
     })
   }
@@ -150,6 +162,8 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   salvarParametrosExperimento() {
     const parametrosRequest = new ParametrosExperimentoRequest();
     if (this.currentExperimento.codExperimento === 1) {
+      parametrosRequest.objetivoX = this.apontar.goalX;
+      parametrosRequest.objetivoY = this.apontar.goalY;
       parametrosRequest.algoritmoBusca = this.experimentoParametroForm.get("algoritmoBusca").value;
     } else {
       parametrosRequest.algoritmoBusca = 0
@@ -252,9 +266,9 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
 
   updateInstrucoesExperimento() {
     this.experimentoService.setExperimentoInstrucoes(this.currentExperimentoInstrucoes).subscribe((resp: any) => {
-        if(resp.body === true) {
-          $('#instrucoesModal').modal('hide');
-        }
+      if (resp.body === true) {
+        $('#instrucoesModal').modal('hide');
+      }
     });
   }
 
@@ -266,20 +280,20 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
 
   parseInstrucoes(instrucoesArr: any) {
     let parsedInstrucoes = [];
-    for(let instrucaoBack of instrucoesArr) {
+    for (let instrucaoBack of instrucoesArr) {
       console.log(instrucaoBack);
       const instrucao = new InstrucaoTrajetoria();
       instrucao.velLinear = instrucaoBack.velLinear;
       instrucao.velAngular = instrucaoBack.velAngular;
       instrucao.timer = instrucaoBack.timer;
 
-      if(instrucao.velLinear == 0 && instrucao.velAngular == 0) {
+      if (instrucao.velLinear == 0 && instrucao.velAngular == 0) {
         instrucao.tipo = 4;
-      } else if(instrucao.velAngular == 0) {
+      } else if (instrucao.velAngular == 0) {
         instrucao.tipo = 1;
-      } else if(instrucao.velLinear == 0) {
+      } else if (instrucao.velLinear == 0) {
         instrucao.tipo = 3;
-        const deltaTheta = instrucao.velAngular * ( instrucao.timer / 1000 );
+        const deltaTheta = instrucao.velAngular * (instrucao.timer / 1000);
         instrucao.rotAngulo = (deltaTheta * (180 / Math.PI));
       } else {
         instrucao.tipo = 2
@@ -290,6 +304,33 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
 
 
     return parsedInstrucoes
+  }
+
+  getCameraMouseEvent(event: MouseEvent) {
+    const offsetX = event.offsetX;
+    const offsetY = event.offsetY;
+
+    const height = this.cameraWrapEl.nativeElement.offsetHeight;
+    const width = this.cameraWrapEl.nativeElement.offsetWidth;
+
+    const cameraHeight = 720;
+    const cameraWidth = 1280;
+
+    const x = Math.floor((offsetX * cameraWidth) / width);
+    const y = Math.floor((offsetY * cameraHeight) / height);
+
+    this.apontar.goalX = x;
+    this.apontar.goalY = y;
+    if (this.currentExperimento != null && this.currentExperimento.codExperimento == 1) {
+      let objetivos = {
+        objetivoX: this.apontar.goalX,
+        objetivoY: this.apontar.goalY
+      }
+
+      this.experimentoService.setApontarGoals(objetivos).subscribe((resp: any) => {
+        
+      });
+    }
   }
 
 }
