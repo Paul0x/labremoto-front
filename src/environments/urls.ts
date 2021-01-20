@@ -13,7 +13,8 @@ export default class URLS {
             experimentoParametros:            HOST + '/laboratorio/experimento-parametros',
             experimentoInstrucoes:            HOST + '/laboratorio/experimento-instrucoes',
             getExperimentoAtivo:              HOST + '/laboratorio/experimento-ativo',
-            experimentoGoals:                 HOST + '/laboratorio/experimento-objetivo'
+            experimentoGoals:                 HOST + '/laboratorio/experimento-objetivo',
+            experimentoStatus:                HOST + '/laboratorio/experimento-status'
           };
         }
     }

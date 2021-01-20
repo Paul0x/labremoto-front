@@ -47,4 +47,8 @@ export class ExperimentoService {
     return this.http.post(environment.URLS.experimentoGoals, goals, { observe: "response" });
   }
 
+  setStatusExperimento(status: any) {
+    return this.http.post(environment.URLS.experimentoStatus, {status: status}, { observe: "response" });
+  }
+
 }

@@ -333,4 +333,18 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  playExperimento() {
+    this.experimentoService.setStatusExperimento(1).subscribe((resp: any) => {
+
+    });
+
+  }
+
+  stopExperimento() {
+    this.experimentoService.setStatusExperimento(0).subscribe((resp: any) => {
+
+    });
+
+  }
+
 }
