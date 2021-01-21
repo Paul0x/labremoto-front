@@ -61,7 +61,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.updateExperimentoData();
-    this.interval = setInterval(() => { this.updateExperimentoData(); }, 200);
+    this.interval = setInterval(() => { this.updateExperimentoData(); }, 20000);
     this.cameraVideoUrl = environment.URLS.cameraImg;
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
       if (resp == null || resp == undefined || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
@@ -161,7 +161,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   salvarParametrosExperimento() {
     const parametrosRequest = new ParametrosExperimentoRequest();
-    if (this.currentExperimento.codExperimento === 1) {
+    if (parseInt(this.currentExperimento.codExperimento) === 1) {
       parametrosRequest.objetivoX = this.apontar.goalX;
       parametrosRequest.objetivoY = this.apontar.goalY;
       parametrosRequest.algoritmoBusca = this.experimentoParametroForm.get("algoritmoBusca").value;
