@@ -50,7 +50,7 @@
 .control-experimento {
     border-radius: 4px;
     text-align: center;
-    margin: auto 10px;
+    margin: auto 0px;
     padding: 10px 0px;
     cursor: pointer;
 }
@@ -75,6 +75,24 @@
 .stop-experimento:hover {
     background: #b41515;
     color: #fff;
+}
+.finish-experimento {
+    background: #007bff;
+    color: #fff;
+    border: 1px solid #2a537e;
+}
+
+.finish-experimento:hover {
+    background: #0558b1;
+    color: #fff;
+    border: 1px solid #2a537e;
+}
+
+.play-experimento:disabled, .stop-experimento:disabled, .finish-experimento:disabled {
+    color: #fff;
+    background: #666;
+    border: 1px solid #333;
+    cursor: auto;
 }
 
 .dados-experimento-title {

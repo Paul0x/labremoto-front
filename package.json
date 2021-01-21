@@ -37,7 +37,7 @@
     "file-saver": "^2.0.0-rc.4",
     "jquery": "^3.5.1",
     "moment": "^2.22.2",
-    "ng-http-loader": "^9.1.0",
+    "ng-http-loader": "^7.0.0",
     "ngx-countdown": "^9.0.0",
     "ngx-mask": "^6.5.15",
     "ngx-toastr": "^10.0.0",

@@ -262,16 +262,23 @@
     <ng-container *ngIf='currentExperimento != null'>
       <div class='col-md-3 col-sm-12'>
         <strong>Experimento Atual</strong> {{ currentExperimento.label }}<br />
-        <strong>Situação</strong> Parado
+        <strong>Situação </strong> 
+        <ng-container *ngIf='experimentoRunStatus == 0'>Parado</ng-container>
+        <ng-container *ngIf='experimentoRunStatus == 1'>Inicializando...</ng-container>
+        <ng-container *ngIf='experimentoRunStatus == 2'>Rodando</ng-container>
+        <ng-container *ngIf='experimentoRunStatus == 3'>Erro</ng-container>
       </div>
-      <div class='col-md-5 col-sm-12'>
+      <div class='col-md-7 col-sm-12'>
         <div class='row'>
-          <div (click)='playExperimento()' class='col-md-5 col-sm-12 control-experimento play-experimento'>
-            <span class='fa fa-play '></span> Rodar Experimento
-          </div>
-          <div (click)="stopExperimento()" class='col-md-5 col-sm-12 control-experimento stop-experimento'>
+          <button type="button" (click)='playExperimento()' [disabled]='experimentoRunStatus != 0' class='col-md-3 col-sm-12 control-experimento play-experimento'>
+            <span class='fa fa-play'></span> Rodar Experimento
+          </button>
+          <button type="button" (click)="stopExperimento()" [disabled]='experimentoRunStatus != 2' class='col-md-3 ml-2 col-sm-12 control-experimento stop-experimento'>
             <span class='fa fa-stop' ></span> Parar Experimento
-          </div>
+          </button>
+          <button type="button" (click)="finishExperimento()" [disabled]='experimentoRunStatus == 2' class='col-md-3 ml-2 col-sm-12 control-experimento finish-experimento'>
+            <span class='fa fa-times' ></span> Finalizar Experimento
+          </button>
         </div>
         <div class='clearfix'></div>
       </div>

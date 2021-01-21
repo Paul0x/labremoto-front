@@ -35,12 +35,12 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
     goalX: 0,
     goalY: 0
   }
+  experimentoRunStatus = 0;
   ev3Data: Ev3Data = new Ev3Data();
+  
   experimentoParametroForm: FormGroup;
-
   parametrosSalvosErr = false;
   parametrosSalvosOk = false;
-
   expInstrucaoForm: FormGroup;
 
   @ViewChild('cameraWrap', { static: false }) cameraWrapEl: ElementRef;
@@ -95,6 +95,9 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
   getEv3Data() {
     this.experimentoService.getEv3Data(this.cameraTimestamp).subscribe((resp: Ev3Data) => {
       this.ev3Data = resp;
+      if(this.ev3Data.running == 1) {
+        this.experimentoRunStatus = 2;
+      }
     });
   }
 
@@ -335,6 +338,9 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   playExperimento() {
     this.experimentoService.setStatusExperimento(1).subscribe((resp: any) => {
+      if(resp.status === 200) {
+        this.experimentoRunStatus = 1;
+      }
 
     });
 
@@ -342,6 +348,9 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   stopExperimento() {
     this.experimentoService.setStatusExperimento(0).subscribe((resp: any) => {
+      if(resp.status === 200) {
+        this.experimentoRunStatus = 0;
+      }
 
     });
 

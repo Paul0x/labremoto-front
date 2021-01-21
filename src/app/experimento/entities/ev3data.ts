@@ -6,5 +6,6 @@ export class Ev3Data {
     goalPosY: number;
     angularVel: number;
     linearVel: number;
+    running: number;
 
 }

@@ -45,7 +45,7 @@ export function tokenGetter() {
     CalendarModule,
     SessionModule,
     MainPageModule,
-    NgHttpLoaderModule,
+    NgHttpLoaderModule.forRoot(),
     ExperimentoModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
