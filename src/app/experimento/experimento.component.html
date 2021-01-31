@@ -257,6 +257,14 @@
           <img  #cameraTrajeWrap src='{{ getTrajetoriaImage() }}' id='camera-traje-image' />
         </div>
       </div>
+       <div class="card  mt-3" *ngIf='currentExperimento != null'>
+        <div class="card-header">
+          Resultados
+        </div>
+        <div class="card-body" id="resultado-wrap">
+          Nenhum resultado encontrado.
+        </div>
+      </div>
 
     </div>
   </div>

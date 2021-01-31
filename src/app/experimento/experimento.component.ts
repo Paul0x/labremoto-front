@@ -20,34 +20,45 @@ declare var $: any;
   templateUrl: './experimento.component.html',
   styleUrls: ['./experimento.component.css']
 })
-export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ExperimentoComponent implements OnInit, OnDestroy {
 
-  sessaoAtiva: any = null;
-  user: any = null;
-  sessionCountdown = null;
+  // URLs das câmeras
   cameraVideoUrl;
   mapeamentoVideoUrl;
   trajetoriaVideoUrl;
-  cameraTimestamp = 0;
-  interval;
+
+  // Dados do usuário
+  user: any = null;
+
+  // Dados da Sessão e Experimento
+  sessaoAtiva: any = null;
+  sessionCountdown = null;
   currentExperimento = null;
   currentExperimentoInstrucoes = [];
-  experimentos = [];
-  apontar = {
+  apontar = { // Posição a ser apontada
     goalX: 0,
     goalY: 0
   }
   experimentoRunStatus = 0;
+  // Dados recebidos do ev3
   ev3Data: Ev3Data = new Ev3Data();
-  
+
+  // Listas
+  experimentos = [];
+
+  // Timestamp de recuperação dos dados
+  cameraTimestamp = 0;
+  currentTimestamp: any;
+
+  // Intervalo
+  interval;
+
+  // Variáveis de formulário e controle da página
   experimentoParametroForm: FormGroup;
   parametrosSalvosErr = false;
   parametrosSalvosOk = false;
   expInstrucaoForm: FormGroup;
   cameraNavTab = 1;
-
-  currentTimestamp: any;
-
   @ViewChild('cameraWrap', { static: false }) cameraWrapEl: ElementRef;
 
   constructor(private labolatorioService: LaboratorioService,
@@ -57,9 +68,6 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
     private formBuilder: FormBuilder,
     private router: Router) { }
 
-  ngAfterViewInit() {
-
-  }
   ngOnDestroy() {
     clearInterval(this.interval);
   }
@@ -94,9 +102,11 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
   getCameraImage() {
     return this.cameraVideoUrl + '?t' + this.currentTimestamp + '-' + this.cameraTimestamp;
   }
+
   getMapeamentoImage() {
     return this.mapeamentoVideoUrl + '?t' + this.currentTimestamp + this.cameraTimestamp;
   }
+
   getTrajetoriaImage() {
     return this.trajetoriaVideoUrl + '?t' + this.currentTimestamp + this.cameraTimestamp;
   }
@@ -109,7 +119,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
   getEv3Data() {
     this.experimentoService.getEv3Data(this.currentTimestamp, this.cameraTimestamp).subscribe((resp: Ev3Data) => {
       this.ev3Data = resp;
-      if(this.ev3Data.running == 1) {
+      if (this.ev3Data.running == 1) {
         this.experimentoRunStatus = 2;
       }
     });
@@ -222,13 +232,11 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.expInstrucaoForm.get("velLinear").setValue(null);
     this.expInstrucaoForm.get("velAngular").setValue(null);
     this.expInstrucaoForm.get("rotAngulo").setValue(null);
-
   }
 
   addInstrucaoToArray() {
     const instrucao = new InstrucaoTrajetoria();
     instrucao.tipo = parseInt(this.expInstrucaoForm.get("tipoInstrucao").value);
-
     switch (instrucao.tipo) {
       case 1:
         instrucao.velLinear = this.expInstrucaoForm.get("velLinear").value;
@@ -250,9 +258,6 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.currentExperimentoInstrucoes.push(instrucao);
     this.resetExpInstrucaoQuant();
-    console.log(this.currentExperimentoInstrucoes);
-
-
   }
 
   getTipoInstrucaoLabel(tipo: number) {
@@ -318,8 +323,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
       parsedInstrucoes.push(instrucao);
     }
-
-
+    
     return parsedInstrucoes
   }
 
@@ -345,14 +349,14 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       this.experimentoService.setApontarGoals(objetivos).subscribe((resp: any) => {
-        
+
       });
     }
   }
 
   playExperimento() {
     this.experimentoService.setStatusExperimento(1).subscribe((resp: any) => {
-      if(resp.status === 200) {
+      if (resp.status === 200) {
         this.experimentoRunStatus = 1;
       }
 
@@ -362,7 +366,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   stopExperimento() {
     this.experimentoService.setStatusExperimento(0).subscribe((resp: any) => {
-      if(resp.status === 200) {
+      if (resp.status === 200) {
         this.experimentoRunStatus = 0;
       }
 
