@@ -7,6 +7,8 @@ export default class URLS {
             sessaoAtiva:                      HOST + '/laboratorio/sessao-ativa',
             startSession:                     HOST + '/laboratorio/sessao',
             cameraImg:                        FLASK_REF + '/static/imgVideo.jpg',
+            mapeamentoImg:                    FLASK_REF + '/static/imgGraph.jpg',
+            trajetoriaImg:                    FLASK_REF + '/static/imgTraje.jpg',
             ev3Data:                          FLASK_REF + '/static/ev3data.json',
             getExperimentos:                  HOST + '/laboratorio/experimentos',
             setExperimento:                   HOST + '/laboratorio/experimento',

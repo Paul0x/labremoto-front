@@ -122,3 +122,7 @@
 .instrucoes-small {
     font-size: .7em;
 }
+
+.camera-nav-tab span {
+    cursor: pointer;
+}

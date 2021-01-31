@@ -26,6 +26,8 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
   user: any = null;
   sessionCountdown = null;
   cameraVideoUrl;
+  mapeamentoVideoUrl;
+  trajetoriaVideoUrl;
   cameraTimestamp = 0;
   interval;
   currentExperimento = null;
@@ -42,6 +44,9 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
   parametrosSalvosErr = false;
   parametrosSalvosOk = false;
   expInstrucaoForm: FormGroup;
+  cameraNavTab = 1;
+
+  currentTimestamp: any;
 
   @ViewChild('cameraWrap', { static: false }) cameraWrapEl: ElementRef;
 
@@ -61,8 +66,11 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.updateExperimentoData();
-    this.interval = setInterval(() => { this.updateExperimentoData(); }, 20000);
+    this.interval = setInterval(() => { this.updateExperimentoData(); }, 500);
     this.cameraVideoUrl = environment.URLS.cameraImg;
+    this.trajetoriaVideoUrl = environment.URLS.trajetoriaImg;
+    this.mapeamentoVideoUrl = environment.URLS.mapeamentoImg;
+    this.currentTimestamp = + new Date();
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
       if (resp == null || resp == undefined || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
         this.router.navigateByUrl("/");
@@ -84,7 +92,13 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getCameraImage() {
-    return this.cameraVideoUrl + "?t" + this.cameraTimestamp;
+    return this.cameraVideoUrl + '?t' + this.currentTimestamp + '-' + this.cameraTimestamp;
+  }
+  getMapeamentoImage() {
+    return this.mapeamentoVideoUrl + '?t' + this.currentTimestamp + this.cameraTimestamp;
+  }
+  getTrajetoriaImage() {
+    return this.trajetoriaVideoUrl + '?t' + this.currentTimestamp + this.cameraTimestamp;
   }
 
   updateExperimentoData() {
@@ -93,7 +107,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getEv3Data() {
-    this.experimentoService.getEv3Data(this.cameraTimestamp).subscribe((resp: Ev3Data) => {
+    this.experimentoService.getEv3Data(this.currentTimestamp, this.cameraTimestamp).subscribe((resp: Ev3Data) => {
       this.ev3Data = resp;
       if(this.ev3Data.running == 1) {
         this.experimentoRunStatus = 2;
@@ -356,4 +370,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
+  changeCameraNavTab(tab: number) {
+    this.cameraNavTab = tab;
+  }
 }

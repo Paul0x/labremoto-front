@@ -11,8 +11,8 @@ export class ExperimentoService {
 
   constructor(private http: HttpClient) { }
 
-  getEv3Data(timeStamp: number) {
-    return this.http.get(environment.URLS.ev3Data + '?' + timeStamp);
+  getEv3Data(currentTimestamp:number, timeStamp: number) {
+    return this.http.get(environment.URLS.ev3Data + '?' + currentTimestamp + '-' + timeStamp);
   }
 
   getExperimentos() {

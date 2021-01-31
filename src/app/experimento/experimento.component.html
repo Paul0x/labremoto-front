@@ -233,8 +233,28 @@
         <div class="card-header">
           Câmera
         </div>
-        <div class="card-body" id="camera-wrap">
+        <ul class="nav nav-tabs camera-nav-tab">
+          <li class="nav-item">
+            <span class="nav-link" (click)='changeCameraNavTab(1)'>Câmera</span>
+          </li>
+          <li class="nav-item">
+            <span class="nav-link"  (click)='changeCameraNavTab(2)'>Mapeamento</span>
+          </li>
+          <li class="nav-item">
+            <span class="nav-link" (click)='changeCameraNavTab(3)' >Trajetória</span>
+          </li>
+          <li class="nav-item">
+            <span class="nav-link" (click)='changeCameraNavTab(4)' >Mostrar Tudo</span>
+          </li>
+        </ul>
+        <div class="card-body" id="camera-wrap" *ngIf='cameraNavTab == 1 || cameraNavTab == 4'>
           <img (click)="getCameraMouseEvent($event)" #cameraWrap src='{{ getCameraImage() }}' id='camera-image' />
+        </div>
+        <div class="card-body" id="mapeamento-wrap" *ngIf='cameraNavTab == 2 || cameraNavTab == 4'>
+          <img (click)="getCameraMouseEvent($event)" #cameraMapWrap src='{{ getMapeamentoImage() }}' id='camera-map-image' />
+        </div>
+        <div class="card-body" id="trajetoria-wrap" *ngIf='cameraNavTab == 3 || cameraNavTab == 4'>
+          <img  #cameraTrajeWrap src='{{ getTrajetoriaImage() }}' id='camera-traje-image' />
         </div>
       </div>
 
