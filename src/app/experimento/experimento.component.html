@@ -261,8 +261,35 @@
         <div class="card-header">
           Resultados
         </div>
-        <div class="card-body" id="resultado-wrap">
+        <div class="card-body" id="resultado-wrap" *ngIf='experimentoResultados.length == 0'>
           Nenhum resultado encontrado.
+        </div>
+        <div class="card-body" id="resultado-wrap" *ngIf='experimentoResultados.length > 0'>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Início</th>
+                <th scope="col">Tempo</th>
+                <th scope="col">Pos x</th>
+                <th scope="col">Pos y</th>
+                <th scope="col">Vel Linear</th>
+                <th scope="col">Vel Angular</th>
+                <th scope="col">#</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let resultado of experimentoResultados; let i = index '>
+                <td scope="row">{{ resultado.startTime | date: 'HH:mm' }}</td>
+                <td scope="row">{{ resultado.dtCriacao | date: 'HH:mm:ss' }}</td>
+                <td>{{ resultado.posX }}</td>
+                <td>{{ resultado.posY }}</td>
+                <td>{{ resultado.linearVel }}</td>
+                <td>{{ resultado.angularVel }}</td>
+                <td><span class='fa fa-plus'></span></td>
+              </tr>
+            </tbody>
+          </table>
+    
         </div>
       </div>
 

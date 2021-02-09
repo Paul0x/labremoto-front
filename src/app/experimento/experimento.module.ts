@@ -16,6 +16,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [ExperimentoService]
+  providers: [ExperimentoService, DatePipe]
 })
 export class ExperimentoModule { }

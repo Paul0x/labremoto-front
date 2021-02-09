@@ -42,6 +42,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   experimentoRunStatus = 0;
   // Dados recebidos do ev3
   ev3Data: Ev3Data = new Ev3Data();
+  experimentoResultados: any[] = [];
 
   // Listas
   experimentos = [];
@@ -50,8 +51,10 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   cameraTimestamp = 0;
   currentTimestamp: any;
 
-  // Intervalo
+  // Intervalos de checagem
   interval;
+  intervalResults;
+  intervalSessao;
 
   // Variáveis de formulário e controle da página
   experimentoParametroForm: FormGroup;
@@ -70,15 +73,42 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     clearInterval(this.interval);
+    clearInterval(this.intervalResults);
+    clearInterval(this.intervalSessao);
   }
 
   ngOnInit() {
     this.updateExperimentoData();
-    this.interval = setInterval(() => { this.updateExperimentoData(); }, 500);
+    this.interval = setInterval(() => { this.updateExperimentoData(); }, 2600);
+    this.intervalResults = setInterval(() => { this.getExperimentoResults(); }, 5000);
+    this.intervalSessao = setInterval(() => { this.checkSessaoAtiva(); }, 60000);
     this.cameraVideoUrl = environment.URLS.cameraImg;
     this.trajetoriaVideoUrl = environment.URLS.trajetoriaImg;
     this.mapeamentoVideoUrl = environment.URLS.mapeamentoImg;
     this.currentTimestamp = + new Date();
+    this.getSessaoAtiva();
+
+  }
+
+  checkSessaoAtiva() {
+    if (this.sessaoAtiva == null || this.sessaoAtiva == undefined) {
+      return;
+    }
+
+    this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
+      if (resp == null || resp == undefined || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
+        this.router.navigateByUrl("/");
+      } else {
+        if (resp.codigo != this.sessaoAtiva.codigo) {
+          this.router.navigateByUrl("/");
+        }
+      }
+
+    });
+
+  }
+
+  getSessaoAtiva() {
     this.labolatorioService.findSessaoAtiva().subscribe((resp: any) => {
       if (resp == null || resp == undefined || resp.ativo === 0 || resp.matricula != this.tokenService.getMatricula()) {
         this.router.navigateByUrl("/");
@@ -96,7 +126,6 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
         this.getExperimentoAtivo();
       }
     });
-
   }
 
   getCameraImage() {
@@ -323,7 +352,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
 
       parsedInstrucoes.push(instrucao);
     }
-    
+
     return parsedInstrucoes
   }
 
@@ -369,12 +398,33 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
       if (resp.status === 200) {
         this.experimentoRunStatus = 0;
       }
-
     });
-
   }
 
   changeCameraNavTab(tab: number) {
     this.cameraNavTab = tab;
   }
+
+  getExperimentoResults() {
+    this.getExperimentoAtivo();
+    if (this.currentExperimento == null) {
+      return;
+    }
+
+    this.experimentoService.getExperimentoResultados(this.currentExperimento.codigo).subscribe((resp: any) => {
+      this.experimentoResultados = resp;
+    });
+
+  }
+
+  finishExperimento() {
+    this.experimentoService.encerrarExperimento().subscribe((resp: any) => {
+      this.currentExperimento = null;
+      this.currentExperimentoInstrucoes = null;
+      this.experimentoResultados = [];
+      this.experimentoRunStatus = 0;
+      this.stopExperimento();
+    })
+  }
+
 }

@@ -51,4 +51,12 @@ export class ExperimentoService {
     return this.http.post(environment.URLS.experimentoStatus, {status: status}, { observe: "response" });
   }
 
+  getExperimentoResultados(codigo: number) {
+    return this.http.get(environment.URLS.experimentoResultados + "&codigo=" + codigo);
+  }
+
+  encerrarExperimento() {
+    return this.http.get(environment.URLS.encerrarExperimento);
+  }
+
 }
