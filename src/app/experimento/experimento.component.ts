@@ -79,7 +79,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.updateExperimentoData();
-    this.interval = setInterval(() => { this.updateExperimentoData(); }, 2600);
+    this.interval = setInterval(() => { this.updateExperimentoData(); }, 400);
     this.intervalResults = setInterval(() => { this.getExperimentoResults(); }, 5000);
     this.intervalSessao = setInterval(() => { this.checkSessaoAtiva(); }, 60000);
     this.cameraVideoUrl = environment.URLS.cameraImg;

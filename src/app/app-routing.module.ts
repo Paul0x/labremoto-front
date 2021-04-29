@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ExperimentoComponent } from './experimento/experimento.component';
+import { HistoryExperimentoComponent } from './history/history-experimento/history-experimento.component';
 
 
 const routes: Routes = [
@@ -17,7 +18,8 @@ const routes: Routes = [
     {path: 'setup', component: SetupComponent},
     {path: 'agenda', component: CalendarComponent},
     {path: 'historico', component: HistoryListComponent},
-    {path: 'experimento', component: ExperimentoComponent}
+    {path: 'experimento', component: ExperimentoComponent},
+    {path: 'experimento/:codigo', component: HistoryExperimentoComponent}
 ];
 
 @NgModule({

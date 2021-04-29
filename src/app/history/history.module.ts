@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HistoryListComponent } from './history-list/history-list.component';
+import { HistoryService } from './history.service';
+import { RouterModule } from '@angular/router';
+import { HistoryExperimentoComponent } from './history-experimento/history-experimento.component';
 
 @NgModule({
-  declarations: [HistoryListComponent],
+  declarations: [HistoryListComponent, HistoryExperimentoComponent],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+    RouterModule
+  ],
+  providers: [HistoryService, DatePipe]
 })
 export class HistoryModule { }
