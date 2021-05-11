@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ModalAlertComponent } from './modal-alert.component';
 
@@ -6,7 +6,7 @@ describe('ModalAlertComponent', () => {
   let component: ModalAlertComponent;
   let fixture: ComponentFixture<ModalAlertComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ModalAlertComponent ]
     })

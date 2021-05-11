@@ -1,4 +1,3 @@
-import { LaboratorioService } from './../services/laboratorio.service';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MainPageComponent } from './main-page.component';

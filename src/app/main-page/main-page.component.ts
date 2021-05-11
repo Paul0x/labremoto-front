@@ -1,7 +1,7 @@
 import { LaboratorioService } from './../services/laboratorio.service';
 import { Component, OnInit } from '@angular/core';
-import { TokenService } from 'app/services/token.service';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { TokenService } from '../services/token.service';
 
 @Component({
   selector: 'app-main-page',

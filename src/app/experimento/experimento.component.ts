@@ -62,7 +62,7 @@ export class ExperimentoComponent implements OnInit, OnDestroy {
   parametrosSalvosOk = false;
   expInstrucaoForm: FormGroup;
   cameraNavTab = 1;
-  @ViewChild('cameraWrap', { static: false }) cameraWrapEl: ElementRef;
+  @ViewChild('cameraWrap') cameraWrapEl: ElementRef;
 
   constructor(private labolatorioService: LaboratorioService,
     private tokenService: TokenService,

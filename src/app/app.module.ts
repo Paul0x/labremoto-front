@@ -49,11 +49,8 @@ export function tokenGetter() {
     MainPageModule,
     NgHttpLoaderModule.forRoot(),
     ExperimentoModule,
+    ToastrModule.forRoot(),
     BrowserAnimationsModule,
-    ToastrModule.forRoot({
-      timeOut: 1000,
-      positionClass: 'toast-bottom-right'
-    }),
     AppRoutingModule,
      JwtModule.forRoot({
       config: {
