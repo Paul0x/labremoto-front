@@ -1,9 +1,11 @@
-<div class='row mt-5'>
+<div class='row mt-3'>
   <div class='col-md-12'>
     <div class="card">
       <div class='card-body'>
+        <div class='panel border-bottom p-2 mb-3'>
+          
         <h4>Histórico de Experimentos</h4>
-        <div class='panel'>Na lista abaixo você pode visualizar todo o seu histórico de experimentos realizados no
+          Na lista abaixo você pode visualizar todo o seu histórico de experimentos realizados no
           laboratório.</div>
         <ng-container *ngFor='let experimento of experimentos; let i = index'>
           <a routerLink='/experimento/{{experimento.codigo}}'>

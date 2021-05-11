@@ -26,6 +26,7 @@ import { ExperimentoModule } from './experimento/experimento.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 registerLocaleData(ptBr);
 export function tokenGetter() {
@@ -51,6 +52,7 @@ export function tokenGetter() {
     ExperimentoModule,
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
+    NgxMatNativeDateModule,
     AppRoutingModule,
      JwtModule.forRoot({
       config: {
