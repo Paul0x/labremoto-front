@@ -1,4 +1,4 @@
-import { CalendarModule } from './calendar/calendar.module';
+import { AgendaModule } from './calendar/Agenda.module';
 import { HistoryModule } from './history/history.module';
 import { SessionModule } from './session/session.module';
 import { LaboratorioService } from './services/laboratorio.service';
@@ -24,6 +24,8 @@ import ptBr from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 import { ExperimentoModule } from './experimento/experimento.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 registerLocaleData(ptBr);
 export function tokenGetter() {
@@ -42,7 +44,7 @@ export function tokenGetter() {
     LoginModule,
     HttpClientModule,
     HistoryModule,
-    CalendarModule,
+    AgendaModule,
     SessionModule,
     MainPageModule,
     NgHttpLoaderModule.forRoot(),
@@ -60,7 +62,8 @@ export function tokenGetter() {
         blacklistedRoutes: [ `${environment.BASE_REF}/login`],
         skipWhenExpired: true
       }
-    })
+    }),
+     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
   providers: [SharedDataService, LoginService, TokenService, LaboratorioService,
     ToastrService,

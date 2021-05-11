@@ -1,5 +1,5 @@
 import { HistoryListComponent } from './history/history-list/history-list.component';
-import { CalendarComponent } from './calendar/calendar.component';
+import { AgendaComponent } from './calendar/agenda.component';
 import { SetupComponent } from './session/setup/setup.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { WonderwallComponent } from './wonderwall/wonderwall.component';
@@ -16,7 +16,7 @@ const routes: Routes = [
     {path: 'wonderwall/:token', component: WonderwallComponent},
     {path: 'logout/:token', component: WonderwallComponent},
     {path: 'setup', component: SetupComponent},
-    {path: 'agenda', component: CalendarComponent},
+    {path: 'agenda', component: AgendaComponent},
     {path: 'historico', component: HistoryListComponent},
     {path: 'experimento', component: ExperimentoComponent},
     {path: 'experimento/:codigo', component: HistoryExperimentoComponent}
