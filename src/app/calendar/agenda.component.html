@@ -4,7 +4,8 @@
       <div class='card-body'>
         <div class='panel border-bottom p-2 mb-3'>
           <h4>Agendamento do Laboratório</h4>
-          Utilize o calendário para visualizar os horários em que o laboratório estará ocupado e o formulário para agendar seus horários de utilização.
+          Utilize o calendário para visualizar os horários em que o laboratório estará ocupado e o formulário para
+          agendar seus horários de utilização.
         </div>
         <div class='row m-3'>
           <div class='col-md-6 col-sm-12'>
@@ -12,14 +13,15 @@
               <div class="col-md-4">
                 <div class="btn-group-sm btn-group">
                   <div class="btn btn-dark" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-                    (viewDateChange)="closeOpenMonthViewDay()">
+                    (viewChange)="listAgendaFull()" (viewDateChange)="listAgendaFull()">
                     Anterior
                   </div>
-                  <div class="btn btn-light" mwlCalendarToday [(viewDate)]="viewDate">
+                  <div class="btn btn-light" mwlCalendarToday [(viewDate)]="viewDate" (viewChange)="listAgendaFull()"
+                    (viewDateChange)="listAgendaFull()">
                     Hoje
                   </div>
                   <div class="btn btn-dark" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
-                    (viewDateChange)="closeOpenMonthViewDay()">
+                    (viewChange)="listAgendaFull()" (viewDateChange)="listAgendaFull()">
                     Próximo
                   </div>
                 </div>
@@ -29,7 +31,7 @@
               </div>
               <div class="col-md-4">
                 <div class="btn-group-sm btn-group">
-                  <div class="btn btn-light" (click)="setView(CalendarView.Month)"
+                  <div class="btn btn-light" (viewChange)="listAgendaFull()" (click)="setView(CalendarView.Month)"
                     [class.active]="view === CalendarView.Month">
                     Mês
                   </div>
@@ -45,32 +47,26 @@
               </div>
             </div>
             <br />
-            <div [ngSwitch]="view">
-              <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
-                [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
-                (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
-              </mwl-calendar-month-view>
-              <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
-                [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-                (eventTimesChanged)="eventTimesChanged($event)">
-              </mwl-calendar-week-view>
-              <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
-                [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-                (eventTimesChanged)="eventTimesChanged($event)">
-              </mwl-calendar-day-view>
+
+            <div *ngIf="events$ | async; let events">
+              <div [ngSwitch]="view">
+                <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
+                  [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+                  (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+                </mwl-calendar-month-view>
+                <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
+                  [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+                  (eventTimesChanged)="eventTimesChanged($event)">
+                </mwl-calendar-week-view>
+                <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
+                  [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+                  (eventTimesChanged)="eventTimesChanged($event)">
+                </mwl-calendar-day-view>
+              </div>
             </div>
           </div>
-          <div class='col-md-6 col-sm-12'>dsdas
-              <mat-form-field>s
-                  <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date" [formControl]="dateControl"
-                     [min]="minDate" [max]="maxDate" [disabled]="disabled">
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
-                     [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond"
-                     [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" 
-                     [disableMinute]="disableMinute" [hideTime]="hideTime">
-                  </ngx-mat-datetime-picker>
-               </mat-form-field>
+          <div class='col-md-6 col-sm-12'>
+            <h4>Agendar Horário de Uso</h4>
           </div>
         </div>
       </div>

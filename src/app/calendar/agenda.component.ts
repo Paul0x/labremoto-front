@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { AgendaService } from './agenda.service';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   ViewChild,
@@ -13,9 +14,13 @@ import {
   isSameDay,
   isSameMonth,
   addHours,
+  startOfWeek,
+  startOfMonth,
+  endOfWeek,
+  format,
 } from 'date-fns';
-import { Subject } from 'rxjs';
-import { registerLocaleData } from '@angular/common';
+import { Observable, Subject } from 'rxjs';
+import { DatePipe, registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 
 registerLocaleData(localePt);
@@ -27,6 +32,7 @@ import {
 } from 'angular-calendar';
 import { ThemePalette } from '@angular/material/core';
 import { FormControl } from '@angular/forms';
+import { map } from 'rxjs/operators';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -44,14 +50,15 @@ const colors: any = {
 @Component({
   selector: 'app-agenda',
   templateUrl: './agenda.component.html',
-  styleUrls: ['./agenda.component.css']
+  styleUrls: ['./agenda.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgendaComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   locale: string = 'pt-BR';
   viewDate: Date = new Date();
-
+  events$: Observable<CalendarEvent<{ film: any }>[]>;
   public disabled = false;
   public showSpinners = true;
   public showSeconds = false;
@@ -128,23 +135,59 @@ export class AgendaComponent implements OnInit {
       draggable: true,
     },
   ];
-
+  viewChange = new EventEmitter<CalendarView>();
   activeDayIsOpen: boolean = true;
-  constructor() { }
+  constructor(private agendaService: AgendaService, private datePipe: DatePipe) { }
 
   ngOnInit() {
+    this.agendaService.getListaAgendaUsuario().subscribe((resp: any) => {
+
+    });
+    this.listAgendaFull();
   }
 
 
   handleEvent(action: string, event: CalendarEvent): void {
-   }
+  }
 
   setView(view: CalendarView) {
     this.view = view;
+    this.listAgendaFull();
   }
 
-  closeOpenMonthViewDay() {
+  listAgendaFull() {
     this.activeDayIsOpen = false;
+    const getStart: any = {
+      month: startOfMonth,
+      week: startOfWeek,
+      day: startOfDay,
+    }[this.view];
+
+    const getEnd: any = {
+      month: endOfMonth,
+      week: endOfWeek,
+      day: endOfDay,
+    }[this.view];
+    console.log('ayy');
+    console.log(format(getEnd(this.viewDate), 'yyyy-MM-dd'));
+    this.events$ = this.agendaService.getListaAgendaFull(format(getStart(this.viewDate), 'yyyy-MM-dd'), format(getEnd(this.viewDate), 'yyyy-MM-dd'))
+      .pipe(
+        map((results: any) => {
+          return results.map((result: any) => {
+            return {
+              title: result[0] + ' - ' + this.datePipe.transform(new Date(result[3]),'dd/MM/yyyy HH:mm '),
+              start: new Date(result[3]
+              ),
+              end: new Date(result[3]),
+              color: colors.blue,
+              allDay: false,
+              meta: {
+                result,
+              },
+            };
+          });
+        })
+      );
   }
 
 }

@@ -1,3 +1,4 @@
+import { AgendaService } from './agenda.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgendaComponent } from './agenda.component';
@@ -26,6 +27,7 @@ import {MatInputModule} from '@angular/material/input';
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
-  ]
+  ],
+  providers: [AgendaService]
 })
 export class AgendaModule { }
